@@ -2,49 +2,60 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Kalkulator Cargo 3D</title>
 <meta name="description" content="Perencana muatan 3D untuk container dan truk (Fuso, Tronton, Trailer).">
 <meta name="theme-color" content="#1c6db3">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Cargo 3D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--dw:360px;--line:#c4cbd2;--ink:#1d2731;--muted:#5f6c79;--accent:#1c6db3;--accent2:#15578f;--ok:#17803d;--okbg:#e7f5ec;--bad:#c62828;--badbg:#fdecec;--box:#f6f8fa;--shadow:0 1px 3px rgba(20,30,40,.2)}
+:root{
+  --dw:360px;--line:#c4cbd2;--ink:#1d2731;--muted:#5f6c79;
+  --accent:#1c6db3;--accent2:#15578f;--ok:#17803d;--okbg:#e7f5ec;
+  --bad:#c62828;--badbg:#fdecec;--box:#f6f8fa;--shadow:0 1px 3px rgba(20,30,40,.2)
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;font:12.5px/1.35 "Source Sans 3","Segoe UI",system-ui,sans-serif;background:#d5dbe1;color:var(--ink)}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid #5fa3dc;outline-offset:1px}
-.topbar{position:fixed;top:0;left:0;right:0;height:50px;z-index:30;display:flex;align-items:center;gap:16px;padding:0 12px;background:linear-gradient(#fafbfc,#e4e8ec);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+
+/* Topbar */
+.topbar{position:fixed;top:0;left:0;right:0;height:50px;z-index:30;display:flex;align-items:center;gap:12px;padding:0 12px;background:linear-gradient(#fafbfc,#e4e8ec);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
 .brand{display:flex;align-items:center;gap:9px;white-space:nowrap;flex-shrink:0}
-.brand-logo{width:30px;height:30px;border-radius:4px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px}
+.brand-logo{width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#2578c0,#144f82);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.2)}
 .brand h1{font-size:15px;font-weight:700;line-height:1.1}
 .brand span{font-size:10.5px;color:var(--muted);display:block}
 .veh-bar{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.veh-bar select,.veh-bar input{height:28px;border:1px solid #aeb7c0;border-radius:3px;background:#fff;padding:2px 6px}
-.veh-bar select{width:176px;font-weight:600;cursor:pointer}
+.veh-bar select,.veh-bar input{height:28px;border:1px solid #aeb7c0;border-radius:4px;background:#fff;padding:2px 6px}
+.veh-bar select{width:170px;font-weight:600;cursor:pointer}
 .veh-dim{display:flex;align-items:center;gap:4px;color:var(--muted);font-weight:600}
-.veh-dim input{width:52px;text-align:center;padding:2px 3px}
-.unit-seg{display:inline-flex;border:1px solid #aeb7c0;border-radius:3px;overflow:hidden;flex-shrink:0}
-.unit-seg button{border:0;border-right:1px solid #aeb7c0;background:#fff;padding:4px 9px;font-weight:600;cursor:pointer;color:var(--muted)}
+.veh-dim input{width:50px;text-align:center;padding:2px 3px}
+.unit-seg{display:inline-flex;border:1px solid #aeb7c0;border-radius:4px;overflow:hidden;flex-shrink:0}
+.unit-seg button{border:0;border-right:1px solid #aeb7c0;background:#fff;padding:4px 8px;font-weight:600;cursor:pointer;color:var(--muted)}
 .unit-seg button:last-child{border-right:0}
 .unit-seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
-.top-metrics{display:flex;align-items:center;gap:16px;white-space:nowrap;margin-left:auto}
+
+/* Undo & Redo group in Topbar */
+.hist-seg{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
+.hist-btn{height:28px;padding:0 9px;border:1px solid #aeb7c0;border-radius:4px;background:linear-gradient(#fff,#e9edf0);font-weight:600;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.hist-btn:hover:not(:disabled){background:linear-gradient(#fff,#dde3e8);border-color:#8fbce3;color:var(--accent2)}
+.hist-btn:disabled{opacity:.45;cursor:not-allowed;background:#eef1f4}
+
+.top-metrics{display:flex;align-items:center;gap:14px;white-space:nowrap;margin-left:auto}
 .metric{display:flex;flex-direction:column;align-items:flex-end}
 .metric span{font-size:10.5px;color:var(--muted)}
 .metric b{font-size:12.5px;font-weight:700}
 .metric b.warn{color:var(--bad)}
+
+/* 3D Canvas Container */
 #three{position:fixed;top:50px;left:var(--dw);right:0;bottom:0;z-index:1;background:linear-gradient(#eef1f4,#cdd4db)}
 body.nodock #three{left:0}
-.left-dock{position:fixed;top:50px;left:0;bottom:0;width:var(--dw);z-index:20;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .25s}
+
+/* Left Dock */
+.left-dock{position:fixed;top:50px;left:0;bottom:0;width:var(--dw);z-index:20;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .22s ease}
 .left-dock.collapsed{transform:translateX(-100%)}
-.dock-toggle{position:fixed;top:62px;left:var(--dw);z-index:21;width:22px;height:44px;background:#fff;border:1px solid var(--line);border-left:0;border-radius:0 4px 4px 0;cursor:pointer;color:var(--muted);font-size:10px;box-shadow:var(--shadow);transition:left .25s}
+.dock-toggle{position:fixed;top:62px;left:var(--dw);z-index:21;width:22px;height:44px;background:#fff;border:1px solid var(--line);border-left:0;border-radius:0 4px 4px 0;cursor:pointer;color:var(--muted);font-size:10px;box-shadow:var(--shadow);transition:left .22s ease}
 .left-dock.collapsed + .dock-toggle{left:0}
 .tabs{display:flex;background:#eef1f4;border-bottom:1px solid var(--line)}
 .tabs button{flex:1;border:0;border-bottom:3px solid transparent;background:transparent;padding:10px 6px 8px;font-weight:600;color:var(--muted);cursor:pointer}
@@ -53,76 +64,110 @@ body.nodock #three{left:0}
 .tab-body.active{display:flex}
 .tab-body::-webkit-scrollbar{width:6px}
 .tab-body::-webkit-scrollbar-thumb{background:#c4cbd2;border-radius:3px}
-#status{padding:8px 10px;border-radius:3px;font-weight:600;border:1px solid transparent;border-left-width:4px}
+
+/* Status & Cargo Cards */
+#status{padding:8px 10px;border-radius:4px;font-weight:600;border:1px solid transparent;border-left-width:4px}
 #status.ok{background:var(--okbg);color:var(--ok);border-color:#9fd5b2}
 #status.bad{background:var(--badbg);color:var(--bad);border-color:#f0b4b4}
 ul.msg{margin:4px 0 0 16px;font-weight:500;font-size:11.5px}
-.cargo-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:3px;background:#fff}
+.cargo-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:4px;background:#fff}
 .cargo-card{display:grid;grid-template-columns:24px 1fr auto;gap:8px;align-items:center;padding:8px;border-bottom:1px solid #e3e7eb}
 .cargo-card:last-child{border-bottom:0}
 .cargo-card:hover{background:#f3f8fd}
-.badge-col{position:relative;overflow:hidden;width:24px;height:100%;min-height:54px;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-weight:700;font-size:12px;text-shadow:0 1px 1px rgba(0,0,0,.3)}.badge-col i{font-style:normal;font-size:10px;opacity:.85}.badge-col input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}.badge-col:hover{box-shadow:0 0 0 2px #7fb4e3}.badge-col:focus-within{outline:2px solid #5fa3dc;outline-offset:1px}
+.badge-col{position:relative;overflow:hidden;width:24px;height:100%;min-height:54px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-weight:700;font-size:12px;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.badge-col i{font-style:normal;font-size:10px;opacity:.85}
+.badge-col input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}
+.badge-col:hover{box-shadow:0 0 0 2px #7fb4e3}
 .card-fields{display:flex;flex-direction:column;gap:6px}
 .card-top{display:flex;gap:5px;align-items:center}
-.card-top input[type=text]{flex:1;min-width:0;border:1px solid #b8c1ca;border-radius:3px;padding:4px 6px;font-weight:600;background:#fff}
-.card-top select{border:1px solid #b8c1ca;border-radius:3px;padding:4px 3px;background:#fff;font-weight:600}
+.card-top input[type=text]{flex:1;min-width:0;border:1px solid #b8c1ca;border-radius:4px;padding:4px 6px;font-weight:600;background:#fff}
+.card-top select{border:1px solid #b8c1ca;border-radius:4px;padding:4px 3px;background:#fff;font-weight:600}
 .card-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .mini-inp{display:flex;flex-direction:column;gap:1px}
 .mini-inp span{font-size:10px;color:var(--muted);font-weight:600;text-align:center}
-.mini-inp input{width:100%;border:1px solid #b8c1ca;border-radius:3px;padding:3px 2px;text-align:center;background:#fff}
+.mini-inp input{width:100%;border:1px solid #b8c1ca;border-radius:4px;padding:3px 2px;text-align:center;background:#fff}
 .card-actions{display:flex;flex-direction:column;align-items:center;gap:8px}
-.del-btn{border:1px solid #e3b4b4;background:var(--badbg);color:var(--bad);width:24px;height:24px;border-radius:3px;cursor:pointer;font-weight:700}
+.del-btn{border:1px solid #e3b4b4;background:var(--badbg);color:var(--bad);width:24px;height:24px;border-radius:4px;cursor:pointer;font-weight:700}
 .del-btn:hover{background:#f9d6d6}
 .stk-lbl{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:600;color:var(--muted);cursor:pointer}
 .stk-lbl input{accent-color:var(--accent);width:14px;height:14px}
+
+/* Buttons */
 .action-row{display:flex;gap:6px;flex-wrap:wrap}
-.btn{border:1px solid #aeb7c0;background:linear-gradient(#fff,#e9edf0);padding:6px 12px;border-radius:3px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn{border:1px solid #aeb7c0;background:linear-gradient(#fff,#e9edf0);padding:6px 12px;border-radius:4px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .btn:hover{background:linear-gradient(#fff,#dde3e8)}
 .btn.primary{background:linear-gradient(#2d82cc,var(--accent));border-color:var(--accent2);color:#fff;flex:1}
 .btn.primary:hover{background:linear-gradient(#3a8fd8,var(--accent2))}
+
+/* Right Dock */
 .right-dock{position:fixed;top:62px;right:12px;z-index:20;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-.view-card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:3px;padding:8px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:5px;width:140px}
+.view-card{background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:5px;padding:8px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:5px;width:146px}
 .view-card h4{font-size:11px;font-weight:700;color:var(--muted)}
-.view-card button{border:1px solid var(--line);background:#fff;padding:5px 8px;border-radius:3px;font-weight:600;cursor:pointer;text-align:left}
+.view-card button{border:1px solid var(--line);background:#fff;padding:5px 8px;border-radius:4px;font-weight:600;cursor:pointer;text-align:left}
 .view-card button:hover{background:#eaf3fb;border-color:#8fbce3;color:var(--accent2)}
 .chk-item{display:flex;align-items:center;gap:7px;font-weight:600;cursor:pointer;padding:2px 0}
 .chk-item input{accent-color:var(--accent);width:14px;height:14px}
+.pos-grid{display:grid;grid-template-columns:auto 1fr;gap:4px;align-items:center;font-weight:600}
+.pos-grid input{width:100%;min-width:0;height:24px;border:1px solid #aeb7c0;border-radius:4px;padding:2px 4px}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.pad button{text-align:center;padding:5px 0}
+#posCard{width:182px}
+#posCard summary{cursor:pointer;font-size:11px;font-weight:700;color:var(--muted)}
+#posCard p{margin:0}
+#posCard .col{display:flex;flex-direction:column;gap:5px;margin-top:5px}
+
+/* Bottom Step Controls */
 .load-fab-wrap{position:fixed;bottom:28px;left:calc(var(--dw) + 12px);right:12px;z-index:20;display:flex;justify-content:center;align-items:center;gap:8px;pointer-events:none}
 .load-fab-wrap>*{pointer-events:auto}
 body.nodock .load-fab-wrap{left:12px}
-.step-pill{background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:3px;padding:6px 10px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px}
-.step-pill button{border:1px solid #aeb7c0;background:linear-gradient(#fff,#e9edf0);width:26px;height:26px;border-radius:3px;cursor:pointer;font-size:10px}
+.step-pill{background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:5px;padding:6px 10px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px}
+.step-pill button{border:1px solid #aeb7c0;background:linear-gradient(#fff,#e9edf0);width:26px;height:26px;border-radius:4px;cursor:pointer;font-size:10px}
 .step-pill input[type=range]{width:160px;accent-color:var(--accent);cursor:pointer}
 .step-pill span{font-weight:600;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.load-fab{height:40px;padding:0 20px;border-radius:3px;border:1px solid var(--accent2);background:linear-gradient(#2d82cc,var(--accent));color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+.load-fab{height:40px;padding:0 20px;border-radius:5px;border:1px solid var(--accent2);background:linear-gradient(#2d82cc,var(--accent));color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
 .load-fab:hover{background:linear-gradient(#3a8fd8,var(--accent2))}
-.draw{border:1px solid var(--line);border-radius:3px;background:#f6f8fa;padding:8px;overflow-x:auto}
+
+/* 2D Plan & Report */
+.draw{border:1px solid var(--line);border-radius:4px;background:#f6f8fa;padding:8px;overflow-x:auto}
 svg{width:100%;height:auto;display:block}
 .leg{display:flex;flex-wrap:wrap;gap:5px}
-.leg>span{background:#fff;border:1px solid var(--line);padding:3px 8px;border-radius:3px;font-weight:500}
+.leg>span{background:#fff;border:1px solid var(--line);padding:3px 8px;border-radius:4px;font-weight:500}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle}
 .small{font-size:11.5px;color:var(--muted);line-height:1.45}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:3px;padding:8px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:4px;padding:8px}
 .stat span{font-size:11px;color:var(--muted);font-weight:600;display:block}
 .stat b{font-size:13.5px;margin-top:2px;display:block}
 .meter{height:6px;background:#e2e7ec;border-radius:3px;margin-top:6px;overflow:hidden}
 .meter i{display:block;height:100%;background:var(--accent)}
 .meter i.over{background:var(--bad)}
-#toast{position:fixed;left:50%;top:62px;transform:translateX(-50%);z-index:40;max-width:min(520px,92vw);padding:9px 14px;border-radius:3px;background:#1d2731;color:#fff;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}#toast.show{opacity:1}#toast.bad{background:#c62828}#toast.ok{background:#17803d}
-@media(max-width:1180px){.top-metrics .metric:nth-child(3){display:none}}
-@media(max-width:1024px){.top-metrics,.veh-dim{display:none}:root{--dw:320px}}
-@media(max-width:700px){#three,body.nodock #three{left:0!important}.load-fab-wrap{left:12px!important}.left-dock{width:min(340px,92vw)}.dock-toggle{left:min(340px,92vw)}.brand div:last-child{display:none}.veh-bar select{width:150px}.step-pill input[type=range]{width:70px}.view-card{width:120px}}
-.pos-grid{display:grid;grid-template-columns:auto 1fr;gap:4px;align-items:center;font-weight:600}.pos-grid input{width:100%;min-width:0;height:24px;border:1px solid #aeb7c0;border-radius:3px;padding:2px 4px}
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}.pad button{text-align:center;padding:5px 0}
-#posCard{width:176px}#posCard summary{cursor:pointer;font-size:11px;font-weight:700;color:var(--muted)}#posCard p{margin:0}#posCard .col{display:flex;flex-direction:column;gap:5px;margin-top:5px}
-[hidden]{display:none!important}
-.brand-logo{background:none;border-radius:7px;object-fit:contain}
-#installBtn{white-space:nowrap;flex-shrink:0;margin-left:8px}
-.wm{position:fixed;left:var(--dw);right:0;bottom:6px;z-index:26;text-align:center;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:rgba(29,39,49,.7);text-shadow:0 0 3px rgba(255,255,255,.9);pointer-events:none;user-select:none}
+
+/* Toast & Watermark */
+#toast{position:fixed;left:50%;top:62px;transform:translateX(-50%);z-index:40;max-width:min(520px,92vw);padding:9px 14px;border-radius:5px;background:#1d2731;color:#fff;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+#toast.bad{background:#c62828}
+#toast.ok{background:#17803d}
+.wm{position:fixed;left:var(--dw);right:0;bottom:6px;z-index:26;text-align:center;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:rgba(29,39,49,.72);text-shadow:0 0 3px rgba(255,255,255,.9);pointer-events:none;user-select:none}
 body.nodock .wm{left:0}
-@media(max-width:700px){.wm{left:0!important}}
-@media print{.wm{color:#000;text-shadow:none}#installBtn{display:none!important}}
+[hidden]{display:none!important}
+
+/* Responsive Breakpoints */
+@media(max-width:1280px){.top-metrics .metric:nth-child(3){display:none}}
+@media(max-width:1100px){.top-metrics,.veh-dim{display:none}:root{--dw:320px}}
+@media(max-width:720px){
+  #three,body.nodock #three{left:0!important}
+  .load-fab-wrap{left:12px!important}
+  .left-dock{width:min(340px,92vw)}
+  .dock-toggle{left:min(340px,92vw)}
+  .brand div:last-child{display:none}
+  .veh-bar select{width:136px}
+  .hist-btn .hlbl{display:none}
+  .hist-btn{padding:0 8px}
+  .step-pill input[type=range]{width:70px}
+  .view-card{width:126px}
+  .wm{left:0!important}
+}
+@media print{.wm{color:#000;text-shadow:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -130,7 +175,13 @@ body.nodock .wm{left:0}
 
 <header class="topbar">
   <div class="brand">
-    <img class="brand-logo" src="icon-192.png" alt="Logo Kalkulator Cargo 3D">
+    <div class="brand-logo" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+      </svg>
+    </div>
     <div>
       <h1>Kalkulator Cargo</h1>
       <span>Perencana muatan 3D</span>
@@ -143,17 +194,21 @@ body.nodock .wm{left:0}
       <span>P:</span><input id="cL" type="number" min="0" step="any">
       <span>L:</span><input id="cW" type="number" min="0" step="any">
       <span>T:</span><input id="cH" type="number" min="0" step="any">
-      <span>Max:</span><input id="cP" type="number" min="1" style="width:58px">
+      <span>Max:</span><input id="cP" type="number" min="1" style="width:56px">
     </div>
-    <div class="unit-seg" role="group">
+    <div class="unit-seg" role="group" aria-label="Satuan dimensi">
       <button data-u="MM" aria-pressed="false">MM</button>
       <button data-u="CM" aria-pressed="true">CM</button>
       <button data-u="M" aria-pressed="false">M</button>
     </div>
   </div>
 
+  <div class="hist-seg" role="group" aria-label="Riwayat aksi">
+    <button class="hist-btn" id="undoBtn" disabled title="Undo (Ctrl+Z)">&#8630; <span class="hlbl">Undo</span></button>
+    <button class="hist-btn" id="redoBtn" disabled title="Redo (Ctrl+Y)">&#8631; <span class="hlbl">Redo</span></button>
+  </div>
+
   <div class="top-metrics" id="topMetrics"></div>
-  <button class="btn" id="installBtn" hidden title="Pasang sebagai aplikasi di perangkat ini">Pasang Aplikasi</button>
 </header>
 
 <div id="three"></div>
@@ -180,7 +235,7 @@ body.nodock .wm{left:0}
         <input type="file" id="impf" accept=".xlsx,.xls,.csv,.tsv,.txt" style="font-size:11px;width:100%">
         <button class="btn" id="impt" style="width:100%">Unduh Templat CSV</button>
       </div>
-      <textarea id="impx" rows="3" placeholder="Tempel baris dari Excel di sini..." style="width:100%;margin-top:6px;font:11px monospace;padding:8px;border:1px solid var(--line);border-radius:8px"></textarea>
+      <textarea id="impx" rows="3" placeholder="Tempel baris dari Excel di sini..." style="width:100%;margin-top:6px;font:11px monospace;padding:8px;border:1px solid var(--line);border-radius:6px"></textarea>
       <button class="btn primary" id="impg" style="width:100%;margin-top:6px">Impor Tempelan</button>
       <p class="small" id="impm" style="margin-top:4px;color:var(--ok)"></p>
     </details>
@@ -188,15 +243,15 @@ body.nodock .wm{left:0}
 
   <div class="tab-body" id="tab-plan">
     <div class="action-row">
-      <button class="btn" id="rot">Putar 90°</button>
+      <button class="btn" id="rot">Putar 90&deg;</button>
       <button class="btn" id="auto">Reset Susunan</button>
     </div>
-    <select id="mode" style="padding:7px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px;font-family:inherit;font-weight:600">
+    <select id="mode" style="padding:7px 10px;border-radius:6px;border:1px solid var(--line);font-size:12px;font-family:inherit;font-weight:600">
       <option value="auto">Susunan otomatis (ditumpuk)</option>
       <option value="manual">Susunan manual (seret, tumpuk otomatis)</option>
     </select>
     <p class="small" id="dmsg" style="color:var(--bad)"></p>
-    <b style="font-size:12px">Denah Tampak Atas (Seret & Tumpuk):</b>
+    <b style="font-size:12px">Denah Tampak Atas (Seret &amp; Tumpuk):</b>
     <div class="draw" id="draw"></div>
     <div class="leg" id="leg"></div>
     <b style="font-size:12px;margin-top:6px">Tampak Samping (Tumpukan):</b>
@@ -209,7 +264,7 @@ body.nodock .wm{left:0}
       <button class="btn primary" id="ex">Salin Tabel Excel</button>
       <button class="btn" id="pr">Cetak / PDF</button>
     </div>
-    <textarea id="exp" rows="7" hidden style="width:100%;font:11px monospace;padding:8px;border:1px solid var(--line);border-radius:8px"></textarea>
+    <textarea id="exp" rows="7" hidden style="width:100%;font:11px monospace;padding:8px;border:1px solid var(--line);border-radius:6px"></textarea>
     <p class="small" id="exmsg"></p>
   </div>
 </aside>
@@ -228,14 +283,27 @@ body.nodock .wm{left:0}
     <label class="chk-item"><input type="checkbox" id="vehOn" checked> Kendaraan</label>
     <label class="chk-item"><input type="checkbox" id="wallOn" checked> Kontainer Bening</label>
   </div>
-  <div class="view-card" id="posCard"><details open><summary>Atur Posisi Manual</summary><div class="col">
-    <p class="small" id="selNm">Klik barang di 3D atau denah, lalu seret.</p>
-    <div class="pos-grid"><span>X</span><input id="pX" type="number" step="any"><span>Y</span><input id="pY" type="number" step="any"></div>
-    <div class="pad"><button data-nd="-1,0" title="Geser ke depan (kabin)">&#9664;</button><button data-nd="0,-1" title="Geser ke sisi atas denah">&#9650;</button><button data-nd="0,1" title="Geser ke sisi bawah denah">&#9660;</button><button data-nd="1,0" title="Geser ke belakang (pintu)">&#9654;</button></div>
-    <button id="pRot">Putar 90&deg;</button>
-    <button id="pRst">Reset Susunan</button>
-    <p class="small">Seret barang langsung di 3D. Jatuhkan di atas barang lain untuk menumpuk. Panah = geser 10 cm (bisa juga lewat keyboard).</p>
-  </div></details></div>
+  <div class="view-card" id="posCard">
+    <details open>
+      <summary>Atur Posisi Manual</summary>
+      <div class="col">
+        <p class="small" id="selNm">Klik barang di 3D atau denah, lalu seret.</p>
+        <div class="pos-grid">
+          <span>X</span><input id="pX" type="number" step="any">
+          <span>Y</span><input id="pY" type="number" step="any">
+        </div>
+        <div class="pad">
+          <button data-nd="-1,0" title="Geser ke depan (kabin)">&#9664;</button>
+          <button data-nd="0,-1" title="Geser ke sisi atas denah">&#9650;</button>
+          <button data-nd="0,1" title="Geser ke sisi bawah denah">&#9660;</button>
+          <button data-nd="1,0" title="Geser ke belakang (pintu)">&#9654;</button>
+        </div>
+        <button id="pRot">Putar 90&deg;</button>
+        <button id="pRst">Reset Susunan</button>
+        <p class="small">Seret barang langsung di 3D. Arahkan ke atas barang lain untuk preview tumpuk otomatis. Panah = geser 10 cm.</p>
+      </div>
+    </details>
+  </div>
 </aside>
 
 <div class="load-fab-wrap">
@@ -252,884 +320,1995 @@ body.nodock .wm{left:0}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-var CT={
- "Container 20GP":[589,235,239,28200],
- "Container 40GP":[1203,235,239,26700],
- "Container 40HC":[1203,235,269,26500],
- "Colt Diesel Engkel (CDE)":[420,190,190,3500],
- "Colt Diesel Double (CDD)":[520,200,200,6000],
- "Fuso (6 roda)":[720,235,230,10000],
- "Tronton (10 roda)":[920,240,230,20000],
- "Trailer (bak 12 m)":[1200,245,250,28000],
- "Pickup (Grand Max / L300)":[230,160,150,1000],
- "Box CDE (tertutup)":[400,180,180,3000],
- "Wingbox Fuso (6 roda)":[720,240,240,9000],
- "Wingbox Tronton (10 roda)":[950,245,250,18000],
- "Fuso (tanpa bak)":[720,235,250,8000],
- "Tronton (tanpa bak)":[920,240,250,16000],
- "Trailer (tanpa bak)":[1200,245,250,28000]
+/* ============================================================================
+   1. DATA MASTER KENDARAAN, BARANG DEFAULT & UTILITAS DASAR
+   ============================================================================ */
+var CT = {
+  "Container 20GP":[589,235,239,28200],
+  "Container 40GP":[1203,235,239,26700],
+  "Container 40HC":[1203,235,269,26500],
+  "Colt Diesel Engkel (CDE)":[420,190,190,3500],
+  "Colt Diesel Double (CDD)":[520,200,200,6000],
+  "Fuso (6 roda)":[720,235,230,10000],
+  "Tronton (10 roda)":[920,240,230,20000],
+  "Trailer (bak 12 m)":[1200,245,250,28000],
+  "Pickup (Grand Max / L300)":[230,160,150,1000],
+  "Box CDE (tertutup)":[400,180,180,3000],
+  "Wingbox Fuso (6 roda)":[720,240,240,9000],
+  "Wingbox Tronton (10 roda)":[950,245,250,18000],
+  "Fuso (tanpa bak)":[720,235,250,8000],
+  "Tronton (tanpa bak)":[920,240,250,16000],
+  "Trailer (tanpa bak)":[1200,245,250,28000]
 };
-var items=[
- {n:"Karton Utama A",s:"box",l:120,w:80,h:60,kg:250,q:18,st:true},
- {n:"Palet Elektronik B",s:"box",l:100,w:100,h:75,kg:320,q:10,st:true},
- {n:"Drum Kimia C",s:"round",o:"up",l:58,w:58,h:88,kg:180,q:8,st:false}
+
+var items = [
+  {n:"Karton Utama A",s:"box",l:120,w:80,h:60,kg:250,q:18,st:true},
+  {n:"Palet Elektronik B",s:"box",l:100,w:100,h:75,kg:320,q:10,st:true},
+  {n:"Drum Kimia C",s:"round",o:"up",l:58,w:58,h:88,kg:180,q:8,st:false}
 ];
-var $=function(i){return document.getElementById(i)};
-var UNITS={mm:.1,cm:1,m:100},unit="cm";
-var SHAPE={box:"Kotak",round:"Bulat",pipe:"Pipa"};
-var POS={auto:"Otomatis",up:"Berdiri",lie:"Rebah"};
-function toCm(v){return v*UNITS[unit]}
-function fromCm(v){return parseFloat((v/UNITS[unit]).toFixed(unit==="m"?4:(unit==="cm"?2:1)))}
-function fmtL(v){return fromCm(v).toLocaleString("id-ID")+" "+unit}
 
-var ctSel=$("ct");
-Object.keys(CT).forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=k;ctSel.appendChild(o)});
-ctSel.value="Container 40GP";
+var $ = function(i){ return document.getElementById(i); };
+var UNITS = {mm:.1, cm:1, m:100}, unit = "cm";
+var SHAPE = {box:"Kotak", round:"Bulat", pipe:"Pipa"};
+var POS = {auto:"Otomatis", up:"Berdiri", lie:"Rebah"};
+var PALETTE = ["#e11d48","#d97706","#059669","#2563eb","#7c3aed","#ea580c","#0891b2","#db2777"];
 
-function setCt(){
- ov={};selId=null;
- var c=CT[ctSel.value];
- $("cL").value=fromCm(c[0]);$("cW").value=fromCm(c[1]);$("cH").value=fromCm(c[2]);$("cP").value=c[3];
- calc();
+function toCm(v){ return v * UNITS[unit]; }
+function fromCm(v){ return parseFloat((v / UNITS[unit]).toFixed(unit==="m"?4:(unit==="cm"?2:1))); }
+function fmtL(v){ return fromCm(v).toLocaleString("id-ID") + " " + unit; }
+function fmt(n){ return Math.round(n).toLocaleString("id-ID"); }
+function color(i){ var ci = items[i]; return ci && ci.c ? ci.c : PALETTE[i % PALETTE.length]; }
+function inkOn(h){ var n = parseInt(h.slice(1),16), r = n>>16, g = n>>8&255, b = n&255; return .299*r + .587*g + .114*b > 165 ? "#1d2731" : "#fff"; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+function safeCapture(el, pid){ try{ if(el && el.isConnected && pid !== undefined) el.setPointerCapture(pid); }catch(e){} }
+
+/* State penempatan & interaksi */
+var ov = {}, selId = null, lastRects = [], lastDim = {L:0, W:0, H:0}, last = null;
+var dragging = false, toastUntil = 0, lastMiss = 0, toastTm = null;
+
+function toast(m, bad){
+  var t = $("toast");
+  if(!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.setAttribute("role", "status");
+    document.body.appendChild(t);
+  }
+  t.textContent = m;
+  t.className = "show " + (bad ? "bad" : "ok");
+  toastUntil = Date.now() + 4000;
+  clearTimeout(toastTm);
+  toastTm = setTimeout(function(){ t.className = ""; }, 3800);
 }
-ctSel.onchange=setCt;
-["cL","cW","cH","cP"].forEach(function(i){$(i).oninput=calc});
+function note(m, bad){
+  $("dmsg").textContent = bad ? m : "";
+  toast(m, bad);
+}
+
+/* ============================================================================
+   2. SISTEM UNDO & REDO (RIWAYAT AKSI)
+   ============================================================================ */
+var undoStack = [], redoStack = [], MAX_HIST = 50, pendingInputSnap = null;
+
+function captureState(){
+  return {
+    items: deepClone(items),
+    ov: deepClone(ov),
+    ct: $("ct").value,
+    cL: $("cL").value,
+    cW: $("cW").value,
+    cH: $("cH").value,
+    cP: $("cP").value,
+    mode: $("mode").value,
+    unit: unit
+  };
+}
+
+function updateHistButtons(){
+  var u = $("undoBtn"), r = $("redoBtn");
+  if(u) u.disabled = undoStack.length === 0;
+  if(r) r.disabled = redoStack.length === 0;
+}
+
+function pushHistory(snap){
+  var s = snap || captureState();
+  if(undoStack.length && JSON.stringify(undoStack[undoStack.length - 1]) === JSON.stringify(s)) return;
+  undoStack.push(s);
+  if(undoStack.length > MAX_HIST) undoStack.shift();
+  redoStack.length = 0;
+  updateHistButtons();
+}
+
+function restoreState(s){
+  if(!s) return;
+  items = deepClone(s.items);
+  ov = deepClone(s.ov);
+  unit = s.unit || "cm";
+  document.querySelectorAll("[data-u]").forEach(function(x){
+    x.setAttribute("aria-pressed", x.dataset.u.toLowerCase() === unit ? "true" : "false");
+  });
+  $("ct").value = s.ct;
+  $("cL").value = s.cL;
+  $("cW").value = s.cW;
+  $("cH").value = s.cH;
+  $("cP").value = s.cP;
+  $("mode").value = s.mode;
+  selId = null;
+  renderRows();
+  calc();
+}
+
+function undo(){
+  if(!undoStack.length) return;
+  redoStack.push(captureState());
+  var prev = undoStack.pop();
+  restoreState(prev);
+  updateHistButtons();
+  toast("Undo berhasil", false);
+}
+
+function redo(){
+  if(!redoStack.length) return;
+  undoStack.push(captureState());
+  var next = redoStack.pop();
+  restoreState(next);
+  updateHistButtons();
+  toast("Redo berhasil", false);
+}
+
+$("undoBtn").onclick = undo;
+$("redoBtn").onclick = redo;
+
+/* ============================================================================
+   3. KONTROL UI KENDARAAN, TABS & DAFTAR BARANG
+   ============================================================================ */
+var ctSel = $("ct");
+Object.keys(CT).forEach(function(k){
+  var o = document.createElement("option");
+  o.value = k;
+  o.textContent = k;
+  ctSel.appendChild(o);
+});
+ctSel.value = "Container 40GP";
+
+function setCt(recordHist){
+  if(recordHist) pushHistory();
+  ov = {};
+  selId = null;
+  var c = CT[ctSel.value];
+  $("cL").value = fromCm(c[0]);
+  $("cW").value = fromCm(c[1]);
+  $("cH").value = fromCm(c[2]);
+  $("cP").value = c[3];
+  calc();
+}
+ctSel.onchange = function(){ setCt(true); };
+
+["cL","cW","cH","cP"].forEach(function(id){
+  var el = $(id);
+  el.addEventListener("focus", function(){ pendingInputSnap = captureState(); });
+  el.addEventListener("input", calc);
+  el.addEventListener("change", function(){
+    if(pendingInputSnap){ pushHistory(pendingInputSnap); pendingInputSnap = null; }
+  });
+});
 
 document.querySelectorAll(".tabs button").forEach(function(btn){
- btn.onclick=function(){
-  document.querySelectorAll(".tabs button").forEach(function(b){b.classList.remove("active")});
-  document.querySelectorAll(".tab-body").forEach(function(t){t.classList.remove("active")});
-  btn.classList.add("active");
-  $(btn.dataset.tab).classList.add("active");
- };
+  btn.onclick = function(){
+    document.querySelectorAll(".tabs button").forEach(function(b){ b.classList.remove("active"); });
+    document.querySelectorAll(".tab-body").forEach(function(t){ t.classList.remove("active"); });
+    btn.classList.add("active");
+    $(btn.dataset.tab).classList.add("active");
+  };
 });
-$("dockToggle").onclick=function(){
- var d=$("leftDock"),c=d.classList.toggle("collapsed");
- document.body.classList.toggle("nodock",c);
- $("dockToggle").innerHTML=c?"&#9654;":"&#9664;";
- show3();
-};
 
-function color(i){
- var palette=["#e11d48","#d97706","#059669","#2563eb","#7c3aed","#ea580c","#0891b2","#db2777"];
- var ci=items[i];return ci&&ci.c?ci.c:palette[i%palette.length];
-}
-function inkOn(h){var n=parseInt(h.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return .299*r+.587*g+.114*b>165?"#1d2731":"#fff"}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+$("dockToggle").onclick = function(){
+  var d = $("leftDock"), c = d.classList.toggle("collapsed");
+  document.body.classList.toggle("nodock", c);
+  $("dockToggle").innerHTML = c ? "&#9654;" : "&#9664;";
+  scheduleShow3();
+};
 
 function renderRows(){
- var h="";
- items.forEach(function(it,i){
-  var letter=String.fromCharCode(65+(i%26));
-  var sOpts=Object.keys(SHAPE).map(function(k){return '<option value="'+k+'"'+((it.s||"box")===k?" selected":"")+'>'+SHAPE[k]+'</option>'}).join("");
-  var pOpts=it.s==="round"?'<select data-i="'+i+'" data-k="o">'+Object.keys(POS).map(function(k){return '<option value="'+k+'"'+((it.o||"auto")===k?" selected":"")+'>'+POS[k]+'</option>'}).join("")+'</select>':'';
-  h+='<div class="cargo-card">'+
-   '<label class="badge-col" title="Klik untuk ganti warna" style="background:'+color(i)+';color:'+inkOn(color(i))+'">'+letter+'<i>&#9998;</i><input type="color" data-i="'+i+'" data-k="c" value="'+color(i)+'" aria-label="Warna barang '+letter+'"></label>'+
-   '<div class="card-fields">'+
-    '<div class="card-top"><input type="text" data-i="'+i+'" data-k="n" value="'+esc(it.n)+'"><select data-i="'+i+'" data-k="s">'+sOpts+'</select>'+pOpts+'</div>'+
-    '<div class="card-grid">'+
-     '<div class="mini-inp"><span>'+(it.s==="pipe"?"Panjang":"P ("+unit+")")+'</span><input type="number" min="0" step="any" data-i="'+i+'" data-k="l" value="'+fromCm(it.l)+'"></div>'+
-     '<div class="mini-inp"><span>'+(it.s==="pipe"?"Diameter":"L ("+unit+")")+'</span><input type="number" min="0" step="any" data-i="'+i+'" data-k="w" value="'+fromCm(it.w)+'"></div>'+
-     '<div class="mini-inp"><span>'+(it.s==="pipe"?"(sama)":"T ("+unit+")")+'</span><input type="number" min="0" step="any"'+(it.s==="pipe"?" disabled":"")+' data-i="'+i+'" data-k="h" value="'+fromCm(it.h)+'"></div>'+
-     '<div class="mini-inp"><span>Kg</span><input type="number" min="0" step="any" data-i="'+i+'" data-k="kg" value="'+it.kg+'"></div>'+
-     '<div class="mini-inp"><span>Qty</span><input type="number" min="1" step="1" data-i="'+i+'" data-k="q" value="'+it.q+'"></div>'+
-    '</div>'+
-   '</div>'+
-   '<div class="card-actions">'+
-    '<button class="del-btn" data-del="'+i+'" title="Hapus">✕</button>'+
-    '<label class="stk-lbl"><input type="checkbox" data-i="'+i+'" data-k="st"'+(it.st?" checked":"")+'>Tumpuk</label>'+
-   '</div>'+
-  '</div>';
- });
- $("rows").innerHTML=h;
-}
-
-$("rows").addEventListener("input",function(e){
- var t=e.target,i=t.dataset.i,k=t.dataset.k;if(i===undefined)return;
- var v=parseFloat(t.value)||0;if(k==="l"||k==="w"||k==="h")v=toCm(v);
- items[i][k]=(k==="n"||k==="s"||k==="o"||k==="c")?t.value:(k==="st"?t.checked:v);
- if(k==="c"){var bd=t.parentNode;bd.style.background=t.value;bd.style.color=inkOn(t.value);clearTimeout(window._ct);window._ct=setTimeout(calc,120);return}
- var im=items[i];
- if(k==="s"&&im.s==="pipe"){im.st=true;var mx=Math.max(im.l,im.w,im.h),mn=Math.min(im.l,im.w,im.h);im.l=mx;im.w=mn;im.h=mn}
- if(im.s==="pipe"&&k==="w")im.h=im.w;
- if(k==="s"||k==="o")renderRows();
- else if(im.s==="pipe"&&k==="w"){var hi=t.closest(".cargo-card").querySelector('[data-k="h"]');if(hi)hi.value=fromCm(im.h)}
- calc();
-});
-$("rows").addEventListener("click",function(e){
- var d=e.target.dataset.del;if(d===undefined)return;
- items.splice(+d,1);ov={};selId=null;renderRows();calc();
-});
-$("add").onclick=function(){items.push({n:"Barang "+(items.length+1),s:"box",l:80,w:60,h:60,kg:120,q:4,st:true});renderRows();calc()};
-$("reset").onclick=function(){items=[];ov={};selId=null;renderRows();calc()};
-
-var HDR={n:/^(nama|name|barang|item)/,s:/^(bentuk|shape)/,o:/^(posisi|orientasi)/,l:/^p([^a-z]|$)|^panjang|^length/,w:/^l([^a-z]|$)|^lebar|^width/,h:/^t([^a-z]|$)|^tinggi|^height/,kg:/^(berat|kg|weight)/,q:/^(jumlah|qty|quantity|jml)/,st:/^(tumpuk|boleh|stack)/};
-function num(v){v=String(v).trim().replace(/\s/g,"");if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(v))v=v.replace(/\./g,"").replace(",",".");else v=v.replace(",",".");var n=parseFloat(v);return isNaN(n)?0:n}
-function splitRow(s,d){var o=[],c="",q=false;for(var i=0;i<s.length;i++){var ch=s[i];if(ch==='"'){if(q&&s[i+1]==='"'){c+='"';i++}else q=!q}else if(ch===d&&!q){o.push(c);c=""}else c+=ch}o.push(c);return o}
-function parseText(t){var d=/\t/.test(t)?"\t":(/;/.test(t)?";":",");return t.replace(/\r/g,"").replace(/^\uFEFF/,"").split("\n").filter(function(l){return !/^sep=/i.test(l)}).map(function(l){return splitRow(l,d)})}
-function impRows(rows){
- rows=rows.filter(function(r){return r.some(function(c){return String(c).trim()!==""})});
- if(!rows.length)return "Tidak ada data.";
- var map={},hdr=0;
- rows[0].forEach(function(c,i){c=String(c).trim().toLowerCase();if(/total|termuat/.test(c))return;for(var k in HDR)if(!(k in map)&&HDR[k].test(c)){map[k]=i;break}});
- if(Object.keys(map).length>=3)hdr=1;
- else{map={};var c1=String(rows[0][1]==null?"":rows[0][1]).trim();(c1!==""&&!num(c1)?["n","s","l","w","h","kg","q","st"]:["n","l","w","h","kg","q","st"]).forEach(function(k,i){map[k]=i})}
- var add=[],bad=0;
- rows.slice(hdr).forEach(function(r){
-  function g(k){return k in map&&r[map[k]]!=null?String(r[map[k]]).trim():""}
-  var l=num(g("l")),w=num(g("w")),h=num(g("h"));
-  if(!(l>0&&w>0&&h>0)){bad++;return}
-  add.push({n:g("n")||"Barang "+(items.length+add.length+1),s:/pipa|pipe|tabung/i.test(g("s"))?"pipe":(/bulat|round|drum|silinder|cylind/i.test(g("s"))?"round":"box"),
-   o:/berdiri|tegak|^up/i.test(g("o"))?"up":(/rebah|^lie/i.test(g("o"))?"lie":"auto"),
-   l:toCm(l),w:toCm(w),h:toCm(h),kg:num(g("kg")),q:Math.max(1,Math.round(num(g("q"))||1)),st:/^(ya|y|yes|true|1|x|v)$/i.test(g("st"))});
- });
- if(!add.length)return "Tidak ada baris valid.";
- items=add;ov={};selId=null;renderRows();calc();
- return "Berhasil mengimpor "+add.length+" jenis barang.";
-}
-function loadXlsx(cb){if(window.XLSX)return cb(true);var s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";s.onload=function(){cb(true)};s.onerror=function(){cb(false)};document.head.appendChild(s)}
-$("impf").onchange=function(){var f=this.files[0];if(!f)return;var ext=(f.name.split(".").pop()||"").toLowerCase(),msg=$("impm"),rd=new FileReader();this.value="";
- if(ext==="xlsx"||ext==="xls"){msg.textContent="Membaca Excel...";loadXlsx(function(ok){if(!ok){msg.textContent="Perlu internet untuk .xlsx.";return}rd.onload=function(){var wb=XLSX.read(rd.result,{type:"array"});msg.textContent=impRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:false,defval:""}))};rd.readAsArrayBuffer(f)})}
- else{rd.onload=function(){msg.textContent=impRows(parseText(String(rd.result)))};rd.readAsText(f)}};
-$("impg").onclick=function(){$("impm").textContent=impRows(parseText($("impx").value))};
-$("impt").onclick=function(){var t="sep=;\nNama;Bentuk;Posisi;P (cm);L (cm);T (cm);Berat/unit (kg);Jumlah;Boleh ditumpuk\nKarton A;Kotak;;60;40;40;12;50;Ya\nDrum B;Bulat;Berdiri;58;58;88;180;8;Tidak\nPipa C;Pipa;;600;20;20;45;6;Tidak\n";
- var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\uFEFF"+t],{type:"text/csv"}));a.download="templat-barang.csv";document.body.appendChild(a);a.click();a.remove()};
-
-var ov={},selId=null,lastRects=[],lastDim={L:0,W:0,H:0},last=null;
-function hit(a,b){return a.x<b.x+b.w-.01&&b.x<a.x+a.w-.01&&a.y<b.y+b.h-.01&&b.y<a.y+a.h-.01}
-function zOf(p,map,d){if(p.zf!==undefined)return p.zf;if(!p.onto||d>50)return 0;var q=map[p.onto];if(!q||q.out)return 0;return zOf(q,map,d+1)+q.hh}
-
-var dragging=false,toastUntil=0,lastMiss=0,toastTm;
-function toast(m,bad){
- var t=$("toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");document.body.appendChild(t)}
- t.textContent=m;t.className="show "+(bad?"bad":"ok");toastUntil=Date.now()+4200;
- clearTimeout(toastTm);toastTm=setTimeout(function(){t.className=""},4000);
-}
-function note(m,bad){$("dmsg").textContent=bad?m:"";toast(m,bad)}
-function fits(c,rs,L,W){
- if(c.x<-.01||c.y<-.01||c.x+c.w>L+.01||c.y+c.h>W+.01)return false;
- for(var i=0;i<rs.length;i++)if(!rs[i].out&&hit(c,rs[i]))return false;
- return true;
-}
-function freeSpot(me,rs,L,W,px,py,bl){
- var xs={},ys={};
- function ax(v){xs[Math.round(v*10)]=v}function ay(v){ys[Math.round(v*10)]=v}
- ax(0);ax(L-me.w);ay(0);ay(W-me.h);if(!bl){ax(px);ay(py)}
- rs.forEach(function(o){if(o.out)return;ax(o.x+o.w);ax(o.x-me.w);ay(o.y+o.h);ay(o.y-me.h)});
- var best=null,bs=1e18;
- Object.keys(xs).forEach(function(kx){var x=xs[kx];Object.keys(ys).forEach(function(ky){
-  var y=ys[ky];
-  if(x<-.01||y<-.01||x+me.w>L+.01||y+me.h>W+.01)return;
-  var sc=bl?x*1e4+y:Math.hypot(x-px,y-py)+(x===px?4:0)+(y===py?4:0);
-  var c={x:x,y:y,w:me.w,h:me.h};
-  if(sc>=bs||!fits(c,rs,L,W))return;
-  bs=sc;best=c;
- })});
- return best;
-}
-function backfill(rects,L,W,H,auto){
- var outs=rects.filter(function(r){return r.out&&r.auto&&!ov[r.id]});
- if(!outs.length||rects.length>160)return;
- var rs=rects.filter(function(r){return !r.out}),map={},cv={},dead={};
- rects.forEach(function(r){map[r.id]=r;if(!r.out){if(r.onto)cv[r.onto]=1;if(r.onto2)cv[r.onto2]=1}});
- outs.forEach(function(r){
-  var key=r.gi+"_"+r.w+"_"+r.h;if(dead[key])return;
-  var c=freeSpot(r,rs,L,W,0,0,true),rot=false;
-  if(!c){c=freeSpot({w:r.h,h:r.w},rs,L,W,0,0,true);rot=!!c}
-  if(c){r.x=c.x;r.y=c.y;if(rot){var t0=r.w;r.w=r.h;r.h=t0}r.out=false;r.auto=false;r.onto=null;r.onto2=null;r.zf=undefined;rs.push(r);return}
-  if(auto&&items[r.gi].st){
-   var bt=null;
-   rs.forEach(function(t){
-    if(cv[t.id]||!items[t.gi].st||r.w>t.w+.01||r.h>t.h+.01)return;
-    var z=zOf(t,map,0)+t.hh;if(z+r.hh>H+.01)return;
-    if(!bt||z<bt.z)bt={t:t,z:z};
-   });
-   if(bt){var t1=bt.t;r.x=t1.x+(t1.w-r.w)/2;r.y=t1.y+(t1.h-r.h)/2;r.onto=t1.id;r.onto2=null;r.zf=undefined;r.out=false;r.auto=false;cv[t1.id]=1;rs.push(r);return}
-  }
-  dead[key]=1;
- });
-}
-function dropFix(d){
- var id=d.id,me=lastRects.find(function(r){return r.id===id}),o=ov[id];
- if(!me||!o)return;
- var L=lastDim.L,W=lastDim.W,H=lastDim.H,nm=items[me.gi].n;
- if(me.x+me.w/2<0||me.x+me.w/2>L||me.y+me.h/2<0||me.y+me.h/2>W)return;
- var others=lastRects.filter(function(r){return r.id!==id&&!r.out});
- function put(c,onto,rot){o.x=c.x;o.y=c.y;o.onto=onto||null;if(rot)o.rot=!o.rot}
- function stackOn(t,rot){var w=rot?me.h:me.w,h=rot?me.w:me.h;put({x:t.x+(t.w-w)/2,y:t.y+(t.h-h)/2},t.id,rot)}
- function canStack(t,w,h,both){return !t.cov&&items[t.gi].st&&(!both||items[me.gi].st)&&w<=t.w+.01&&h<=t.h+.01&&t.z+t.hh+me.hh<=H+.01}
- var tgt=null,ta=0,rot=false;
- others.forEach(function(t){
-  var ix=Math.max(0,Math.min(me.x+me.w,t.x+t.w)-Math.max(me.x,t.x)),iy=Math.max(0,Math.min(me.y+me.h,t.y+t.h)-Math.max(me.y,t.y)),a=ix*iy;
-  if(a<me.w*me.h*.5||a<=ta)return;
-  if(canStack(t,me.w,me.h)){tgt=t;ta=a;rot=false}else if(canStack(t,me.h,me.w)){tgt=t;ta=a;rot=true}
- });
- if(tgt){stackOn(tgt,rot);note(nm+" ditumpuk rapi di atas "+items[tgt.gi].n+".",false);return}
- var exact=fits({x:me.x,y:me.y,w:me.w,h:me.h},others,L,W);
- var c=freeSpot(me,others,L,W,me.x,me.y),rr=false;
- if(!c){var c2=freeSpot({w:me.h,h:me.w},others,L,W,me.x,me.y);if(c2){c=c2;rr=true}}
- if(c){put(c,null,rr);if(!exact)note("Space tidak muat di posisi itu, "+nm+" dipindahkan ke ruang kosong.",true);return}
- var alt=null;
- others.forEach(function(t){
-  var r1=canStack(t,me.w,me.h,true),r2=!r1&&canStack(t,me.h,me.w,true);
-  if((r1||r2)&&(!alt||t.z<alt.t.z))alt={t:t,rot:r2};
- });
- if(alt){stackOn(alt.t,alt.rot);note("Lantai penuh, "+nm+" ditumpuk di atas "+items[alt.t.gi].n+".",true);return}
- if(d.prev)ov[id]=d.prev;else delete ov[id];
- note("Space tidak muat! Tidak ada ruang kosong untuk "+nm+", posisinya dikembalikan.",true);
-}
-
-function calc(){
- var L=toCm(+$("cL").value),W=toCm(+$("cW").value),H=toCm(+$("cH").value),P=+$("cP").value;
- lastDim={L:L,W:W,H:H};
- var auto=$("mode").value==="auto";
- var msgs=[],rects=[],x=0,totKg=0,totQ=0,vol=0,legend=[];
- items.forEach(function(it,gi){
-  var q=Math.max(0,Math.floor(it.q)),l=it.l,w=it.w,h=it.h;
-  totQ+=q;totKg+=q*it.kg;vol+=q*l*w*(it.s==="pipe"?Math.min(w,h):h)/1e6;
-  var lg={gi:gi,n:it.n,placed:0,q:q,layers:1,skip:false};legend.push(lg);
-  if(!q||l<=0||w<=0||h<=0){lg.skip=true;return}
-
-  var effL=l,effW=w,effH=h,isLie=false;
-  if(it.s==="round"){
-   var diam=Math.min(l,w);
-   if(it.o==="lie"){
-    isLie=true;effL=h;effW=diam;effH=diam;
-   }else{
-    isLie=false;effL=diam;effW=diam;effH=h;
-   }
-  }
-
-  if(it.s==="pipe"){var pd=Math.min(w,h);isLie=true;effL=l;effW=pd;effH=pd}
-  if(effH>H){msgs.push(it.n+": tinggi melebihi batas ("+fmtL(H)+").");lg.skip=true;return}
-  var layers=(auto&&it.st)?Math.max(1,Math.floor(H/effH)):1;lg.layers=layers;
-  var nf=Math.ceil(q/layers),best=null;
-  [[effL,effW],[effW,effL]].forEach(function(o){
-   var a=o[0],b=o[1];if(b>W||a>L)return;
-   var per=Math.floor(W/b),rows=Math.ceil(nf/per);
-   if(!best||rows*a<best.len)best={a:a,b:b,per:per,len:rows*a};
+  var h = "";
+  items.forEach(function(it, i){
+    var letter = String.fromCharCode(65 + (i % 26));
+    var sOpts = Object.keys(SHAPE).map(function(k){
+      return '<option value="' + k + '"' + ((it.s || "box") === k ? " selected" : "") + '>' + SHAPE[k] + '</option>';
+    }).join("");
+    var pOpts = it.s === "round" ? '<select data-i="' + i + '" data-k="o">' + Object.keys(POS).map(function(k){
+      return '<option value="' + k + '"' + ((it.o || "auto") === k ? " selected" : "") + '>' + POS[k] + '</option>';
+    }).join("") + '</select>' : '';
+    h += '<div class="cargo-card">' +
+      '<label class="badge-col" title="Klik untuk ganti warna" style="background:' + color(i) + ';color:' + inkOn(color(i)) + '">' + letter + '<i>&#9998;</i><input type="color" data-i="' + i + '" data-k="c" value="' + color(i) + '" aria-label="Warna barang ' + letter + '"></label>' +
+      '<div class="card-fields">' +
+        '<div class="card-top"><input type="text" data-i="' + i + '" data-k="n" value="' + esc(it.n) + '"><select data-i="' + i + '" data-k="s">' + sOpts + '</select>' + pOpts + '</div>' +
+        '<div class="card-grid">' +
+          '<div class="mini-inp"><span>' + (it.s === "pipe" ? "Panjang" : "P (" + unit + ")") + '</span><input type="number" min="0" step="any" data-i="' + i + '" data-k="l" value="' + fromCm(it.l) + '"></div>' +
+          '<div class="mini-inp"><span>' + (it.s === "pipe" ? "Diameter" : "L (" + unit + ")") + '</span><input type="number" min="0" step="any" data-i="' + i + '" data-k="w" value="' + fromCm(it.w) + '"></div>' +
+          '<div class="mini-inp"><span>' + (it.s === "pipe" ? "(sama)" : "T (" + unit + ")") + '</span><input type="number" min="0" step="any"' + (it.s === "pipe" ? " disabled" : "") + ' data-i="' + i + '" data-k="h" value="' + fromCm(it.h) + '"></div>' +
+          '<div class="mini-inp"><span>Kg</span><input type="number" min="0" step="any" data-i="' + i + '" data-k="kg" value="' + it.kg + '"></div>' +
+          '<div class="mini-inp"><span>Qty</span><input type="number" min="1" step="1" data-i="' + i + '" data-k="q" value="' + it.q + '"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card-actions">' +
+        '<button class="del-btn" data-del="' + i + '" title="Hapus">&#10005;</button>' +
+        '<label class="stk-lbl"><input type="checkbox" data-i="' + i + '" data-k="st"' + (it.st ? " checked" : "") + '>Tumpuk</label>' +
+      '</div>' +
+    '</div>';
   });
-  if(!best){msgs.push(it.n+": tidak muat di lantai.");lg.skip=true;return}
-  if(it.s==="pipe"&&auto&&it.st&&effL<=L&&effW<=W){
-   var hd=effW,hn0=Math.floor(W/hd),hn1=W>=(hn0+.5)*hd?hn0:hn0-1,hrs=hd*.866,hnl=Math.max(1,1+Math.floor((H-hd)/hrs));
-   var hlay=[],hpre=[],hcap=0;
-   for(var hk=0;hk<hnl;hk++){var hc=hk%2?hn1:hn0;if(hc<1)break;hlay.push(hc);hpre.push(hcap);hcap+=hc}
-   var hns=Math.floor((L-x)/effL);lg.layers=hlay.length;
-   for(var u=0;u<q;u++){
-    var hs=Math.floor(u/hcap),hw=u%hcap,hk2=0;
-    while(hw>=hlay[hk2]){hw-=hlay[hk2];hk2++}
-    var ho=hs>=hns,hr={id:gi+"_"+u,gi:gi,hh:effH,s:"pipe",lie:true,w:effL,h:hd,onto:null,out:ho,auto:ho};
-    if(!ho){hr.x=x+hs*effL;hr.y=hw*hd+(hk2%2?hd/2:0);hr.zf=hk2*hrs;
-     if(hk2>0){var pl=hlay[hk2-1],pb=hs*hcap+hpre[hk2-1],a1=hk2%2?hw:hw-1,a2=hk2%2?hw+1:hw;
-      if(a1<0||a1>=pl){a1=a2;a2=-1}if(a2<0||a2>=pl)a2=-1;
-      hr.onto=gi+"_"+(pb+a1);if(a2>=0)hr.onto2=gi+"_"+(pb+a2)}}
-    rects.push(hr);
-   }
-   x+=Math.min(hns,Math.ceil(q/hcap))*effL;
-   return;
+  $("rows").innerHTML = h;
+}
+
+$("rows").addEventListener("focusin", function(e){
+  if(e.target && e.target.dataset && e.target.dataset.i !== undefined){
+    pendingInputSnap = captureState();
   }
-  var fp=Math.min(nf,Math.max(0,Math.floor((L-x)/best.a)*best.per));
-  for(var u=0;u<q;u++){
-   var f=Math.floor(u/layers),k=u%layers;
-   var r={id:gi+"_"+u,gi:gi,hh:effH,s:it.s||"box",lie:isLie,w:best.a,h:best.b,onto:null,out:f>=fp,auto:f>=fp};
-   if(f<fp){r.x=x+Math.floor(f/best.per)*best.a;r.y=(f%best.per)*best.b;if(k>0)r.onto=gi+"_"+(u-1)}
-   rects.push(r);
+});
+
+$("rows").addEventListener("change", function(e){
+  if(e.target && e.target.dataset && e.target.dataset.i !== undefined && pendingInputSnap){
+    pushHistory(pendingInputSnap);
+    pendingInputSnap = null;
   }
-  x+=Math.ceil(fp/best.per)*best.a;
- });
- var sx=0,sy=W+40,rh=0;
- rects.forEach(function(r){if(!r.auto)return;if(sx>0&&sx+r.w>L){sx=0;sy+=rh+10;rh=0}r.x=sx;r.y=sy;sx+=r.w+10;rh=Math.max(rh,r.h)});
- rects.forEach(function(r){
-  var o=ov[r.id];if(o){r.zf=undefined;r.x=o.x;r.y=o.y;r.onto=o.onto||null;r.onto2=null;if(o.rot){var t=r.w;r.w=r.h;r.h=t}}
-  r.out=!(r.x>=-.01&&r.y>=-.01&&r.x+r.w<=L+.01&&r.y+r.h<=W+.01);r.bad=false;
- });
- backfill(rects,L,W,H,auto);
- var map={};rects.forEach(function(r){map[r.id]=r});
- rects.forEach(function(r){r.z=r.out?0:zOf(r,map,0);r.load=0;r.cov=false});
- rects.forEach(function(r){
-  if(r.out)return;var n=1,q=r,g=0;
-  while(q.onto&&map[q.onto]&&!map[q.onto].out&&g++<50){n++;q=map[q.onto]}
-  r.sn=n;if(r.onto&&map[r.onto]&&!map[r.onto].out)map[r.onto].cov=true;if(r.onto2&&map[r.onto2]&&!map[r.onto2].out)map[r.onto2].cov=true;
-  if(r.z+r.hh>H+.01)r.bad=true;
- });
- var ins=rects.filter(function(r){return !r.out}),anyBad=false;
- for(var i=0;i<ins.length;i++)for(var j=i+1;j<ins.length;j++){var a=ins[i],b=ins[j];if(hit(a,b)&&!(a.zf!==undefined&&b.zf!==undefined&&a.gi===b.gi)&&a.z<b.z+b.hh-.01&&b.z<a.z+a.hh-.01)a.bad=b.bad=true}
- ins.forEach(function(r){if(r.bad)anyBad=true});
- rects.sort(function(a,b){return a.z-b.z});
- var placedQ=0,floorUsed=0,wsum=0,mom=0,maxLoad=0;
- rects.forEach(function(r){
-  if(r.out||r.bad)return;var wt=items[r.gi].kg;
-  legend[r.gi].placed++;placedQ++;wsum+=wt;mom+=wt*(r.x+r.w/2);
-  var b=r,g=0;while(b.onto&&map[b.onto]&&!map[b.onto].out&&g++<50)b=map[b.onto];
-  b.load+=wt;if(r.z===0)floorUsed+=r.w*r.h;
- });
- rects.forEach(function(r){if(!r.out&&!r.bad&&r.z===0){var ld=r.load/(r.w*r.h/1e4);if(ld>maxLoad)maxLoad=ld}});
- var miss=0;legend.forEach(function(g){if(g.skip)return;miss+=g.q-g.placed;if(g.placed<g.q)msgs.push(g.n+": space tidak muat, baru "+g.placed+"/"+g.q+" unit termuat.")});
- if(miss>0&&miss!==lastMiss&&!dragging&&Date.now()>toastUntil)toast("Space tidak muat: "+miss+" unit belum termuat.",true);
- lastMiss=miss;
- if(anyBad)msgs.push("Ada barang bertabrakan / melebihi tinggi.");
- if(totKg>P)msgs.unshift("Overload: "+fmt(totKg)+" kg > "+fmt(P)+" kg.");
+});
 
- var ok=msgs.length===0&&totQ>0,s=$("status");
- s.className=ok?"ok":"bad";
- if(totQ===0)s.innerHTML="Belum ada barang.";
- else if(ok)s.innerHTML="✓ Semua barang ("+placedQ+" unit) muat optimal.";
- else s.innerHTML="! Peringatan Muatan:"+'<ul class="msg">'+msgs.map(function(m){return"<li>"+esc(m)+"</li>"}).join("")+"</ul>";
+$("rows").addEventListener("input", function(e){
+  var t = e.target, i = t.dataset.i, k = t.dataset.k;
+  if(i === undefined) return;
+  if(k === "st" || k === "s" || k === "o" || k === "c"){
+    if(pendingInputSnap){ pushHistory(pendingInputSnap); pendingInputSnap = null; }
+  }
+  var v = parseFloat(t.value) || 0;
+  if(k === "l" || k === "w" || k === "h") v = toCm(v);
+  items[i][k] = (k === "n" || k === "s" || k === "o" || k === "c") ? t.value : (k === "st" ? t.checked : v);
+  if(k === "c"){
+    var bd = t.parentNode;
+    bd.style.background = t.value;
+    bd.style.color = inkOn(t.value);
+    clearTimeout(window._ct);
+    window._ct = setTimeout(calc, 100);
+    return;
+  }
+  var im = items[i];
+  if(k === "s" && im.s === "pipe"){
+    im.st = true;
+    var mx = Math.max(im.l, im.w, im.h), mn = Math.min(im.l, im.w, im.h);
+    im.l = mx; im.w = mn; im.h = mn;
+  }
+  if(im.s === "pipe" && k === "w") im.h = im.w;
+  if(k === "s" || k === "o") renderRows();
+  else if(im.s === "pipe" && k === "w"){
+    var hi = t.closest(".cargo-card").querySelector('[data-k="h"]');
+    if(hi) hi.value = fromCm(im.h);
+  }
+  calc();
+});
 
- var cv=L*W*H/1e6,cg=wsum&&L?mom/wsum/L*100:50;
- var cgT=cg<40?"Condong Depan":(cg>60?"Condong Belakang":"Seimbang");
- var avgLoad=L*W?wsum/(L*W/1e4):0;
+$("rows").addEventListener("click", function(e){
+  var d = e.target.dataset.del;
+  if(d === undefined) return;
+  pushHistory();
+  items.splice(+d, 1);
+  ov = {};
+  selId = null;
+  renderRows();
+  calc();
+});
 
- $("topMetrics").innerHTML=
-  '<div class="metric"><span>Berat Total</span><b class="'+(totKg>P?'warn':'')+'">'+fmt(totKg)+' / '+fmt(P)+' kg</b></div>'+
-  '<div class="metric"><span>Volume</span><b>'+vol.toFixed(2)+' / '+cv.toFixed(2)+' m³</b></div>'+
-  '<div class="metric"><span>Titik Berat</span><b>'+cg.toFixed(0)+'% ('+cgT+')</b></div>'+
-  '<div class="metric"><span>Termuat</span><b>'+placedQ+' / '+totQ+' unit</b></div>';
-
- $("stats").innerHTML=
-  stat("Berat total",fmt(totKg)+" kg",totKg/P)+
-  stat("Volume barang",vol.toFixed(2)+" / "+cv.toFixed(2)+" m³",vol/cv)+
-  stat("Lantai terpakai",(L*W?floorUsed/(L*W)*100:0).toFixed(0)+"%",floorUsed/(L*W))+
-  stat("Unit termuat",placedQ+" / "+totQ,totQ?placedQ/totQ:0,true)+
-  stat2("Beban rata-rata",fmt(avgLoad)+" kg/m²")+
-  stat2("Beban terpadat",fmt(maxLoad)+" kg/m²");
-
- last={L:L,W:W,H:H,P:P,totKg:totKg,totQ:totQ,placedQ:placedQ,vol:vol,legend:legend};
- lastRects=rects;
- draw(L,W,rects,legend);
- side(L,H,rects);
- updSel();
- render3d(L,W,H,rects);
-}
-
-var T3={ready:false};
-function makeEnv(r){
- var s=new THREE.Scene(),c=document.createElement("canvas");c.width=16;c.height=256;
- var x=c.getContext("2d"),g=x.createLinearGradient(0,0,0,256);
- g.addColorStop(0,"#9aa5b1");g.addColorStop(0.45,"#7f8b98");g.addColorStop(0.55,"#566271");g.addColorStop(1,"#2f3945");
- x.fillStyle=g;x.fillRect(0,0,16,256);
- s.add(new THREE.Mesh(new THREE.SphereGeometry(50,32,16),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),side:THREE.BackSide})));
- var p=new THREE.PMREMGenerator(r),t=p.fromScene(s,0.03).texture;p.dispose();return t;
-}
-function init3(){
- if(T3.ready)return true;
- if(typeof THREE==="undefined"){$("three").textContent="Tampilan 3D gagal dimuat.";return false}
- try{
-  var el=$("three");
-  var r=new THREE.WebGLRenderer({antialias:true});
-  r.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
-  el.appendChild(r.domElement);
-  var sc=new THREE.Scene();
-  sc.background=new THREE.Color(0xc4ccd5);
-  sc.fog=new THREE.Fog(0xc4ccd5,3500,12000);
-  sc.add(new THREE.HemisphereLight(0xf1f5f9,0x6b7684,0.5));
-  var dl=new THREE.DirectionalLight(0xfff7ea,0.55);dl.position.set(1,2,1.2);dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);dl.shadow.bias=-0.0005;sc.add(dl);
-  var gl=new THREE.DirectionalLight(0xdbe7f5,0.16);gl.position.set(-1000,900,700);sc.add(gl);
-  r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;
-  try{sc.environment=makeEnv(r)}catch(e){}
-  var grp=new THREE.Group();sc.add(grp);
-  T3={ready:true,dl:dl,r:r,sc:sc,cam:new THREE.PerspectiveCamera(36,1,1,20000),grp:grp,el:el,yaw:-0.58,pitch:0.38,dist:1500,size:0};
-  var cvs=r.domElement,drag=null;
-  cvs.style.touchAction="none";cvs.style.width="100%";cvs.style.height="100%";cvs.style.display="block";
-  var ptrs={};cvs.addEventListener("pointerdown",function(e){ptrs[e.pointerId]=[e.clientX,e.clientY];drag=[e.clientX,e.clientY];cvs.setPointerCapture(e.pointerId)});
-  cvs.addEventListener("pointermove",function(e){var ids=Object.keys(ptrs);if(ptrs[e.pointerId]&&ids.length>1){var a=ptrs[ids[0]],b=ptrs[ids[1]],d0=Math.hypot(a[0]-b[0],a[1]-b[1]);ptrs[e.pointerId]=[e.clientX,e.clientY];a=ptrs[ids[0]];b=ptrs[ids[1]];var d1=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0>0&&d1>0){T3.dist=Math.max(T3.size*.45,Math.min(T3.size*4,T3.dist*d0/d1));show3()}return}if(ptrs[e.pointerId])ptrs[e.pointerId]=[e.clientX,e.clientY];if(!drag)return;T3.yaw-=(e.clientX-drag[0])*.008;T3.pitch=Math.max(.05,Math.min(1.5,T3.pitch+(e.clientY-drag[1])*.008));drag=[e.clientX,e.clientY];show3()});
-  function endP(e){delete ptrs[e.pointerId];drag=null}cvs.addEventListener("pointerup",endP);cvs.addEventListener("pointercancel",endP);
-  cvs.addEventListener("wheel",function(e){e.preventDefault();T3.dist=Math.max(T3.size*.45,Math.min(T3.size*4,T3.dist*(1+e.deltaY*.001)));show3()},{passive:false});
-  window.addEventListener("resize",show3);attach3d(cvs);
-  return true;
- }catch(e){$("three").textContent="Tampilan 3D tidak didukung.";return false}
-}
-function show3(){
- var t=T3;if(!t.ready)return;
- var w=t.el.clientWidth,h=t.el.clientHeight;
- if(w<=0||h<=0)return;
- t.r.setSize(w,h,false);t.cam.aspect=w/h;t.cam.updateProjectionMatrix();
- var c=Math.cos(t.pitch);
- t.cam.position.set((t.cx||0)+t.dist*c*Math.cos(t.yaw),t.dist*Math.sin(t.pitch),t.dist*c*Math.sin(t.yaw));
- t.cam.lookAt(t.cx||0,t.size*.06,0);
- t.r.render(t.sc,t.cam);
-}
-
-var VEH={
- "Container 20GP":{k:"cont",t:1,deck:150,wr:50,ax:2},
- "Container 40GP":{k:"cont",t:1,deck:150,wr:50,ax:3},
- "Container 40HC":{k:"cont",t:1,deck:150,wr:50,ax:3},
- "Colt Diesel Engkel (CDE)":{k:"open",deck:95,cl:150,ch:195,wr:35,ax:1,side:40},
- "Colt Diesel Double (CDD)":{k:"open",deck:105,cl:165,ch:205,wr:40,ax:1,side:45},
- "Fuso (6 roda)":{k:"open",deck:120,cl:175,ch:225,wr:45,ax:1,side:55},
- "Tronton (10 roda)":{k:"open",deck:130,cl:190,ch:245,wr:50,ax:2,side:60},
- "Trailer (bak 12 m)":{k:"flat",t:1,deck:140,wr:50,ax:3},
- "Pickup (Grand Max / L300)":{k:"open",deck:80,cl:130,ch:160,wr:30,ax:1,side:40,single:1},
- "Box CDE (tertutup)":{k:"box",deck:95,cl:150,ch:195,wr:35,ax:1},
- "Wingbox Fuso (6 roda)":{k:"box",deck:120,cl:175,ch:225,wr:45,ax:1},
- "Wingbox Tronton (10 roda)":{k:"box",deck:130,cl:190,ch:245,wr:50,ax:2},
- "Fuso (tanpa bak)":{k:"bare",deck:115,cl:175,ch:225,wr:45,ax:1},
- "Tronton (tanpa bak)":{k:"bare",deck:125,cl:190,ch:245,wr:50,ax:2},
- "Trailer (tanpa bak)":{k:"bare",t:1,deck:140,wr:50,ax:3}
+$("add").onclick = function(){
+  pushHistory();
+  items.push({n:"Barang " + (items.length + 1), s:"box", l:80, w:60, h:60, kg:120, q:4, st:true});
+  renderRows();
+  calc();
 };
-function vehOf(n){return VEH[n]||{k:"open",deck:100,cl:160,ch:200,wr:40,ax:1,side:45}}
-function vehInfo(n){if(!$("vehOn").checked)return{extra:0,deck:0};var v=vehOf(n);return{extra:(v.t?235:v.cl)+20,deck:v.deck}}
 
-function vbox(g,x,y,z,sx,sy,sz,col,op,rough,metal){
- var rVal=rough!==undefined?rough:0.35;
- var isTrans=op!==undefined;
- var mat;
- if(isTrans){
-  mat=new THREE.MeshPhysicalMaterial({
-   color:col,roughness:0.15,metalness:0.05,
-   transparent:true,opacity:op,depthWrite:false,side:THREE.DoubleSide
+$("reset").onclick = function(){
+  pushHistory();
+  items = [];
+  ov = {};
+  selId = null;
+  renderRows();
+  calc();
+};
+
+/* ============================================================================
+   4. IMPOR EXCEL / CSV
+   ============================================================================ */
+var HDR = {
+  n:/^(nama|name|barang|item)/,
+  s:/^(bentuk|shape)/,
+  o:/^(posisi|orientasi)/,
+  l:/^p([^a-z]|$)|^panjang|^length/,
+  w:/^l([^a-z]|$)|^lebar|^width/,
+  h:/^t([^a-z]|$)|^tinggi|^height/,
+  kg:/^(berat|kg|weight)/,
+  q:/^(jumlah|qty|quantity|jml)/,
+  st:/^(tumpuk|boleh|stack)/
+};
+function num(v){
+  v = String(v).trim().replace(/\s/g, "");
+  if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(v)) v = v.replace(/\./g, "").replace(",", ".");
+  else v = v.replace(",", ".");
+  var n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+function splitRow(s, d){
+  var o = [], c = "", q = false;
+  for(var i = 0; i < s.length; i++){
+    var ch = s[i];
+    if(ch === '"'){
+      if(q && s[i+1] === '"'){ c += '"'; i++; }
+      else q = !q;
+    }else if(ch === d && !q){ o.push(c); c = ""; }
+    else c += ch;
+  }
+  o.push(c);
+  return o;
+}
+function parseText(t){
+  var d = /\t/.test(t) ? "\t" : (/;/.test(t) ? ";" : ",");
+  return t.replace(/\r/g, "").replace(/^\uFEFF/, "").split("\n").filter(function(l){
+    return !/^sep=/i.test(l);
+  }).map(function(l){ return splitRow(l, d); });
+}
+function impRows(rows){
+  rows = rows.filter(function(r){ return r.some(function(c){ return String(c).trim() !== ""; }); });
+  if(!rows.length) return "Tidak ada data.";
+  var map = {}, hdr = 0;
+  rows[0].forEach(function(c, i){
+    c = String(c).trim().toLowerCase();
+    if(/total|termuat/.test(c)) return;
+    for(var k in HDR) if(!(k in map) && HDR[k].test(c)){ map[k] = i; break; }
   });
- }else{
-  mat=new THREE.MeshStandardMaterial({
-   color:col,roughness:rVal,metalness:metal!==undefined?metal:0.3
+  if(Object.keys(map).length >= 3) hdr = 1;
+  else{
+    map = {};
+    var c1 = String(rows[0][1] == null ? "" : rows[0][1]).trim();
+    (c1 !== "" && !num(c1) ? ["n","s","l","w","h","kg","q","st"] : ["n","l","w","h","kg","q","st"]).forEach(function(k, i){ map[k] = i; });
+  }
+  var add = [];
+  rows.slice(hdr).forEach(function(r){
+    function g(k){ return k in map && r[map[k]] != null ? String(r[map[k]]).trim() : ""; }
+    var l = num(g("l")), w = num(g("w")), h = num(g("h"));
+    if(!(l > 0 && w > 0 && h > 0)) return;
+    add.push({
+      n: g("n") || "Barang " + (items.length + add.length + 1),
+      s: /pipa|pipe|tabung/i.test(g("s")) ? "pipe" : (/bulat|round|drum|silinder|cylind/i.test(g("s")) ? "round" : "box"),
+      o: /berdiri|tegak|^up/i.test(g("o")) ? "up" : (/rebah|^lie/i.test(g("o")) ? "lie" : "auto"),
+      l: toCm(l), w: toCm(w), h: toCm(h),
+      kg: num(g("kg")),
+      q: Math.max(1, Math.round(num(g("q")) || 1)),
+      st: /^(ya|y|yes|true|1|x|v)$/i.test(g("st"))
+    });
   });
- }
- var m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat);
- m.position.set(x,y,z);
- if(isTrans){m.renderOrder=2;}
- else{m.castShadow=true;m.receiveShadow=true;}
- g.add(m);return m;
+  if(!add.length) return "Tidak ada baris valid.";
+  pushHistory();
+  items = add;
+  ov = {};
+  selId = null;
+  renderRows();
+  calc();
+  return "Berhasil mengimpor " + add.length + " jenis barang.";
 }
-function vcyl(g,x,y,z,rt,rb,h,seg,col,rx,rz,rough,metal){
- var mat=new THREE.MeshStandardMaterial({color:col,roughness:rough!==undefined?rough:0.4,metalness:metal!==undefined?metal:0.6});
- var m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg||28),mat);
- if(rx)m.rotation.x=rx;if(rz)m.rotation.z=rz;m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;
+function loadXlsx(cb){
+  if(window.XLSX) return cb(true);
+  var s = document.createElement("script");
+  s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+  s.onload = function(){ cb(true); };
+  s.onerror = function(){ cb(false); };
+  document.head.appendChild(s);
 }
-function vwheel(g,x,z,r,deck){
- var y=-deck+r;
- vcyl(g,x,y,z,r,r,26,32,0x1a1d20,Math.PI/2,0,0.88,0.05);
- vcyl(g,x,y,z,r*0.95,r*0.95,27.5,32,0x262a2e,Math.PI/2,0,0.82,0.08);
- vcyl(g,x,y,z,r*0.58,r*0.58,28.5,24,0xd1d5db,Math.PI/2,0,0.18,0.9);
- vcyl(g,x,y,z,r*0.44,r*0.44,29.2,20,0x334155,Math.PI/2,0,0.45,0.75);
- vcyl(g,x,y,z,r*0.22,r*0.22,31,16,0x94a3b8,Math.PI/2,0,0.22,0.88);
- for(var b=0;b<8;b++){var ang=b*Math.PI/4;vcyl(g,x+Math.cos(ang)*r*0.34,y+Math.sin(ang)*r*0.34,z,2.1,2.1,30.5,8,0x0f172a,Math.PI/2,0,0.4,0.8)}
-}
-function vaxle(g,x,Wv,r,deck,dual,isRearMost){
- var zz=Wv/2-16;vwheel(g,x,zz,r,deck);vwheel(g,x,-zz,r,deck);
- if(dual){vwheel(g,x,zz-29,r,deck);vwheel(g,x,-(zz-29),r,deck)}
- vcyl(g,x,-deck+r,0,6,6,Wv-48,12,0x1e293b,Math.PI/2,0,0.6,0.7);
- [-1,1].forEach(function(s){
-  var fw=dual?60:32,fz=s*(Wv/2-(dual?28:15));
-  vbox(g,x,-deck+r*2+6,fz,r*1.55,4,fw,0x181b1e,undefined,0.65,0.2);
-  var f1=vbox(g,x-r*0.92,-deck+r*1.6,fz,r*0.68,4,fw,0x181b1e,undefined,0.65,0.2);f1.rotation.z=0.72;
-  var f2=vbox(g,x+r*0.92,-deck+r*1.6,fz,r*0.68,4,fw,0x181b1e,undefined,0.65,0.2);f2.rotation.z=-0.72;
-  if(isRearMost)vbox(g,x+r*1.08,-deck+r*0.8,fz,3,r*1.05,fw*0.92,0x111827,undefined,0.9,0.05);
- });
+$("impf").onchange = function(){
+  var f = this.files[0]; if(!f) return;
+  var ext = (f.name.split(".").pop() || "").toLowerCase(), msg = $("impm"), rd = new FileReader();
+  this.value = "";
+  if(ext === "xlsx" || ext === "xls"){
+    msg.textContent = "Membaca Excel...";
+    loadXlsx(function(ok){
+      if(!ok){ msg.textContent = "Perlu internet untuk .xlsx."; return; }
+      rd.onload = function(){
+        var wb = XLSX.read(rd.result, {type:"array"});
+        msg.textContent = impRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, raw:false, defval:""}));
+      };
+      rd.readAsArrayBuffer(f);
+    });
+  }else{
+    rd.onload = function(){ msg.textContent = impRows(parseText(String(rd.result))); };
+    rd.readAsText(f);
+  }
+};
+$("impg").onclick = function(){ $("impm").textContent = impRows(parseText($("impx").value)); };
+$("impt").onclick = function(){
+  var t = "sep=;\nNama;Bentuk;Posisi;P (cm);L (cm);T (cm);Berat/unit (kg);Jumlah;Boleh ditumpuk\nKarton A;Kotak;;60;40;40;12;50;Ya\nDrum B;Bulat;Berdiri;58;58;88;180;8;Tidak\nPipa C;Pipa;;600;20;20;45;6;Tidak\n";
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\uFEFF" + t], {type:"text/csv"}));
+  a.download = "templat-barang.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
+/* ============================================================================
+   5. MESIN PENEMPATAN & TUMPUKAN 3D PRESISI (ANTI-CLIPPING)
+   ============================================================================ */
+var EPS = 0.05;
+
+function hitXY(a, b){
+  return a.x < b.x + b.w - EPS && b.x < a.x + a.w - EPS &&
+         a.y < b.y + b.h - EPS && b.y < a.y + a.h - EPS;
 }
 
-var TX={};
-function cvTex(key,w,h,fn){
- if(TX[key])return TX[key];
- var c=document.createElement("canvas");c.width=w;c.height=h;fn(c.getContext("2d"),w,h);
- var t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;TX[key]=t;return t;
+function collides3D(a, b){
+  if(!hitXY(a, b)) return false;
+  if(!(a.z < b.z + b.hh - EPS && b.z < a.z + a.hh - EPS)) return false;
+  /* Pipa heksagonal dalam grup yang sama dihitung jarak silindernya */
+  if(a.zf !== undefined && b.zf !== undefined && a.gi === b.gi){
+    var rad = a.hh * 0.5;
+    var dy = (a.y + a.h * 0.5) - (b.y + b.h * 0.5);
+    var dz = (a.z + rad) - (b.z + rad);
+    if(Math.hypot(dy, dz) >= rad * 1.98) return false;
+  }
+  return true;
 }
-function rp(t,rx,ry){var c=t.clone();c.needsUpdate=true;c.repeat.set(rx,ry);return c}
-function corrTex(){return cvTex("corr",64,8,function(x,w,h){var g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,"#80858c");g.addColorStop(.3,"#ffffff");g.addColorStop(.6,"#eeeeee");g.addColorStop(1,"#7a7f87");x.fillStyle=g;x.fillRect(0,0,w,h)})}
-function woodTex(){return cvTex("wood",256,256,function(x,w,h){for(var i=0;i<8;i++){var v=165+Math.random()*40;x.fillStyle="rgb("+(v|0)+","+((v*.74)|0)+","+((v*.46)|0)+")";x.fillRect(0,i*32,w,32);x.fillStyle="rgba(0,0,0,.28)";x.fillRect(0,i*32,w,2);for(var j=0;j<16;j++){x.fillStyle="rgba(70,35,10,.14)";x.fillRect(Math.random()*w,i*32+3+Math.random()*26,20+Math.random()*70,1)}}})}
+
+function zOf(p, map, d){
+  if(p.zf !== undefined) return p.zf;
+  if(!p.onto || d > 50) return 0;
+  var q = map[p.onto];
+  if(!q || q.out) return 0;
+  return zOf(q, map, d + 1) + q.hh;
+}
+
+function fitsFloor(c, rs, L, W){
+  if(c.x < -EPS || c.y < -EPS || c.x + c.w > L + EPS || c.y + c.h > W + EPS) return false;
+  for(var i = 0; i < rs.length; i++){
+    if(rs[i].out) continue;
+    /* Hanya tabrakan dengan barang di lantai (z < EPS) yang menghalangi penempatan lantai */
+    if(rs[i].z < EPS && hitXY(c, rs[i])) return false;
+  }
+  return true;
+}
+
+function freeSpot(me, rs, L, W, px, py, bl){
+  var xs = {}, ys = {};
+  function ax(v){ xs[Math.round(v * 10)] = v; }
+  function ay(v){ ys[Math.round(v * 10)] = v; }
+  ax(0); ax(L - me.w); ay(0); ay(W - me.h);
+  if(!bl){ ax(px); ay(py); }
+  rs.forEach(function(o){
+    if(o.out || o.z >= EPS) return;
+    ax(o.x + o.w); ax(o.x - me.w);
+    ay(o.y + o.h); ay(o.y - me.h);
+  });
+  var best = null, bs = 1e18;
+  Object.keys(xs).forEach(function(kx){
+    var x = xs[kx];
+    Object.keys(ys).forEach(function(ky){
+      var y = ys[ky];
+      if(x < -EPS || y < -EPS || x + me.w > L + EPS || y + me.h > W + EPS) return;
+      var sc = bl ? x * 1e4 + y : Math.hypot(x - px, y - py) + (x === px ? 4 : 0) + (y === py ? 4 : 0);
+      var c = {x:x, y:y, w:me.w, h:me.h};
+      if(sc >= bs || !fitsFloor(c, rs, L, W)) return;
+      bs = sc;
+      best = c;
+    });
+  });
+  return best;
+}
+
+/* Cari target tumpukan valid di bawah koordinat (px, py) yang bebas tabrakan 3D */
+function findStackTarget(me, others, H, px, py, requireBothSt){
+  var best = null;
+  others.forEach(function(t){
+    if(t.out || t.cov || !items[t.gi].st) return;
+    if(requireBothSt && !items[me.gi].st) return;
+    var topZ = t.z + t.hh;
+    if(topZ + me.hh > H + EPS) return;
+
+    var ix = Math.max(0, Math.min(px + me.w, t.x + t.w) - Math.max(px, t.x));
+    var iy = Math.max(0, Math.min(py + me.h, t.y + t.h) - Math.max(py, t.y));
+    var overlap = ix * iy;
+    if(overlap < me.w * me.h * 0.45) return;
+
+    var rot = false, candW = me.w, candH = me.h;
+    if(me.w <= t.w + EPS && me.h <= t.h + EPS){
+      rot = false;
+    }else if(me.h <= t.w + EPS && me.w <= t.h + EPS){
+      rot = true; candW = me.h; candH = me.w;
+    }else{
+      return;
+    }
+
+    var testBox = {
+      id: me.id, gi: me.gi,
+      x: t.x + (t.w - candW) / 2,
+      y: t.y + (t.h - candH) / 2,
+      z: topZ, w: candW, h: candH, hh: me.hh
+    };
+    for(var i = 0; i < others.length; i++){
+      if(!others[i].out && collides3D(testBox, others[i])) return;
+    }
+
+    var score = overlap * 1000 + topZ;
+    if(!best || score > best.score){
+      best = {t:t, rot:rot, score:score, x:testBox.x, y:testBox.y, z:topZ};
+    }
+  });
+  return best;
+}
+
+function backfill(rects, L, W, H, auto){
+  var outs = rects.filter(function(r){ return r.out && r.auto && !ov[r.id]; });
+  if(!outs.length || rects.length > 200) return;
+  var rs = rects.filter(function(r){ return !r.out; });
+  var map = {}, cv = {}, dead = {};
+  rects.forEach(function(r){
+    map[r.id] = r;
+    if(!r.out){
+      if(r.onto) cv[r.onto] = 1;
+      if(r.onto2) cv[r.onto2] = 1;
+    }
+  });
+  rs.forEach(function(r){ r.z = zOf(r, map, 0); });
+
+  outs.forEach(function(r){
+    var key = r.gi + "_" + r.w + "_" + r.h;
+    if(dead[key]) return;
+    var c = freeSpot(r, rs, L, W, 0, 0, true), rot = false;
+    if(!c){
+      c = freeSpot({w:r.h, h:r.w}, rs, L, W, 0, 0, true);
+      rot = !!c;
+    }
+    if(c){
+      r.x = c.x; r.y = c.y;
+      if(rot){ var t0 = r.w; r.w = r.h; r.h = t0; }
+      r.z = 0; r.out = false; r.auto = false; r.onto = null; r.onto2 = null; r.zf = undefined;
+      rs.push(r);
+      return;
+    }
+    if(auto && items[r.gi].st){
+      var bt = null;
+      rs.forEach(function(t){
+        if(cv[t.id] || !items[t.gi].st || r.w > t.w + EPS || r.h > t.h + EPS) return;
+        var z = t.z + t.hh;
+        if(z + r.hh > H + EPS) return;
+        var testBox = {
+          id:r.id, gi:r.gi,
+          x: t.x + (t.w - r.w) / 2,
+          y: t.y + (t.h - r.h) / 2,
+          z: z, w: r.w, h: r.h, hh: r.hh
+        };
+        for(var k = 0; k < rs.length; k++){
+          if(collides3D(testBox, rs[k])) return;
+        }
+        if(!bt || z < bt.z) bt = {t:t, z:z, x:testBox.x, y:testBox.y};
+      });
+      if(bt){
+        r.x = bt.x; r.y = bt.y; r.z = bt.z;
+        r.onto = bt.t.id; r.onto2 = null; r.zf = undefined;
+        r.out = false; r.auto = false;
+        cv[bt.t.id] = 1;
+        rs.push(r);
+        return;
+      }
+    }
+    dead[key] = 1;
+  });
+}
+
+function dropFix(d){
+  var id = d.id, me = lastRects.find(function(r){ return r.id === id; }), o = ov[id];
+  if(!me || !o) return;
+  var L = lastDim.L, W = lastDim.W, H = lastDim.H, nm = items[me.gi].n;
+  if(me.x + me.w / 2 < 0 || me.x + me.w / 2 > L || me.y + me.h / 2 < 0 || me.y + me.h / 2 > W) return;
+
+  var others = lastRects.filter(function(r){ return r.id !== id && !r.out; });
+  function put(c, onto, rot){
+    o.x = c.x; o.y = c.y; o.onto = onto || null;
+    if(rot) o.rot = !o.rot;
+  }
+
+  /* 1. Cek tumpuk langsung di atas barang di bawah kursor */
+  var st = findStackTarget(me, others, H, me.x, me.y, false);
+  if(st){
+    put({x:st.x, y:st.y}, st.t.id, st.rot);
+    note(nm + " ditumpuk rapi di atas " + items[st.t.gi].n + ".", false);
+    return;
+  }
+
+  /* 2. Cek ruang kosong di lantai kontainer */
+  var exact = fitsFloor({x:me.x, y:me.y, w:me.w, h:me.h}, others, L, W);
+  var c = freeSpot(me, others, L, W, me.x, me.y, false), rr = false;
+  if(!c){
+    var c2 = freeSpot({w:me.h, h:me.w}, others, L, W, me.x, me.y, false);
+    if(c2){ c = c2; rr = true; }
+  }
+  if(c){
+    put(c, null, rr);
+    if(!exact) note("Space lantai terisi, " + nm + " digeser ke ruang kosong terdekat.", true);
+    return;
+  }
+
+  /* 3. Lantai penuh: cari tumpukan alternatif terendah yang valid */
+  var alt = null;
+  others.forEach(function(t){
+    if(t.cov || !items[t.gi].st || !items[me.gi].st) return;
+    var topZ = t.z + t.hh;
+    if(topZ + me.hh > H + EPS) return;
+    var r1 = (me.w <= t.w + EPS && me.h <= t.h + EPS);
+    var r2 = !r1 && (me.h <= t.w + EPS && me.w <= t.h + EPS);
+    if(!r1 && !r2) return;
+    var cw = r2 ? me.h : me.w, ch = r2 ? me.w : me.h;
+    var testBox = {id:me.id, gi:me.gi, x:t.x + (t.w - cw)/2, y:t.y + (t.h - ch)/2, z:topZ, w:cw, h:ch, hh:me.hh};
+    for(var k = 0; k < others.length; k++) if(collides3D(testBox, others[k])) return;
+    if(!alt || topZ < alt.z) alt = {t:t, rot:r2, x:testBox.x, y:testBox.y, z:topZ};
+  });
+  if(alt){
+    put({x:alt.x, y:alt.y}, alt.t.id, alt.rot);
+    note("Lantai penuh, " + nm + " ditumpuk di atas " + items[alt.t.gi].n + ".", true);
+    return;
+  }
+
+  /* 4. Tidak ada ruang: kembalikan ke posisi sebelum drag */
+  if(d.prev) ov[id] = d.prev;
+  else delete ov[id];
+  note("Space tidak muat! Posisi " + nm + " dikembalikan.", true);
+}
+
+/* ============================================================================
+   6. KALKULASI UTAMA & VALIDASI MUATAN
+   ============================================================================ */
+function calc(){
+  var L = toCm(+$("cL").value), W = toCm(+$("cW").value), H = toCm(+$("cH").value), P = +$("cP").value;
+  lastDim = {L:L, W:W, H:H};
+  var auto = $("mode").value === "auto";
+  var msgs = [], rects = [], x = 0, totKg = 0, totQ = 0, vol = 0, legend = [];
+
+  items.forEach(function(it, gi){
+    var q = Math.max(0, Math.floor(it.q)), l = it.l, w = it.w, h = it.h;
+    totQ += q;
+    totKg += q * it.kg;
+    vol += q * l * w * (it.s === "pipe" ? Math.min(w, h) : h) / 1e6;
+    var lg = {gi:gi, n:it.n, placed:0, q:q, layers:1, skip:false};
+    legend.push(lg);
+    if(!q || l <= 0 || w <= 0 || h <= 0){ lg.skip = true; return; }
+
+    var effL = l, effW = w, effH = h, isLie = false;
+    if(it.s === "round"){
+      var diam = Math.min(l, w);
+      if(it.o === "lie"){ isLie = true; effL = h; effW = diam; effH = diam; }
+      else{ isLie = false; effL = diam; effW = diam; effH = h; }
+    }
+    if(it.s === "pipe"){
+      var pd = Math.min(w, h);
+      isLie = true; effL = l; effW = pd; effH = pd;
+    }
+    if(effH > H + EPS){
+      msgs.push(it.n + ": tinggi melebihi batas (" + fmtL(H) + ").");
+      lg.skip = true;
+      return;
+    }
+
+    var layers = (auto && it.st) ? Math.max(1, Math.floor((H + EPS) / effH)) : 1;
+    lg.layers = layers;
+    var nf = Math.ceil(q / layers), best = null;
+    [[effL, effW], [effW, effL]].forEach(function(o){
+      var a = o[0], b = o[1];
+      if(b > W + EPS || a > L + EPS) return;
+      var per = Math.floor((W + EPS) / b), rows = Math.ceil(nf / per);
+      if(!best || rows * a < best.len) best = {a:a, b:b, per:per, len:rows * a};
+    });
+    if(!best){
+      msgs.push(it.n + ": tidak muat di lantai.");
+      lg.skip = true;
+      return;
+    }
+
+    /* Susunan pipa heksagonal bertumpuk */
+    if(it.s === "pipe" && auto && it.st && effL <= L + EPS && effW <= W + EPS){
+      var hd = effW;
+      var hn0 = Math.floor((W + EPS) / hd);
+      var hn1 = W >= (hn0 + 0.5) * hd - EPS ? hn0 : hn0 - 1;
+      var hrs = hd * 0.8660254;
+      var hnl = Math.max(1, 1 + Math.floor((H - hd + EPS) / hrs));
+      var hlay = [], hpre = [], hcap = 0;
+      for(var hk = 0; hk < hnl; hk++){
+        var hc = hk % 2 ? hn1 : hn0;
+        if(hc < 1) break;
+        hlay.push(hc);
+        hpre.push(hcap);
+        hcap += hc;
+      }
+      var hns = Math.floor((L - x + EPS) / effL);
+      lg.layers = hlay.length;
+      for(var u = 0; u < q; u++){
+        var hs = Math.floor(u / hcap), hw = u % hcap, hk2 = 0;
+        while(hw >= hlay[hk2]){ hw -= hlay[hk2]; hk2++; }
+        var ho = hs >= hns;
+        var hr = {id:gi + "_" + u, gi:gi, hh:effH, s:"pipe", lie:true, w:effL, h:hd, onto:null, out:ho, auto:ho};
+        if(!ho){
+          hr.x = x + hs * effL;
+          hr.y = hw * hd + (hk2 % 2 ? hd * 0.5 : 0);
+          hr.zf = hk2 * hrs;
+          if(hk2 > 0){
+            var pl = hlay[hk2 - 1], pb = hs * hcap + hpre[hk2 - 1];
+            var a1 = hk2 % 2 ? hw : hw - 1, a2 = hk2 % 2 ? hw + 1 : hw;
+            if(a1 < 0 || a1 >= pl){ a1 = a2; a2 = -1; }
+            if(a2 < 0 || a2 >= pl) a2 = -1;
+            hr.onto = gi + "_" + (pb + a1);
+            if(a2 >= 0) hr.onto2 = gi + "_" + (pb + a2);
+          }
+        }
+        rects.push(hr);
+      }
+      x += Math.min(hns, Math.ceil(q / hcap)) * effL;
+      return;
+    }
+
+    var fp = Math.min(nf, Math.max(0, Math.floor((L - x + EPS) / best.a) * best.per));
+    for(var u2 = 0; u2 < q; u2++){
+      var f = Math.floor(u2 / layers), k = u2 % layers;
+      var r = {id:gi + "_" + u2, gi:gi, hh:effH, s:it.s || "box", lie:isLie, w:best.a, h:best.b, onto:null, out:f >= fp, auto:f >= fp};
+      if(f < fp){
+        r.x = x + Math.floor(f / best.per) * best.a;
+        r.y = (f % best.per) * best.b;
+        if(k > 0) r.onto = gi + "_" + (u2 - 1);
+      }
+      rects.push(r);
+    }
+    x += Math.ceil(fp / best.per) * best.a;
+  });
+
+  /* Area parkir barang yang belum termuat di luar denah */
+  var sx = 0, sy = W + 40, rh = 0;
+  rects.forEach(function(r){
+    if(!r.auto) return;
+    if(sx > 0 && sx + r.w > L){ sx = 0; sy += rh + 10; rh = 0; }
+    r.x = sx; r.y = sy; sx += r.w + 10; rh = Math.max(rh, r.h);
+  });
+
+  /* Terapkan override manual */
+  rects.forEach(function(r){
+    var o = ov[r.id];
+    if(o){
+      r.zf = undefined;
+      r.x = o.x;
+      r.y = o.y;
+      r.onto = o.onto || null;
+      r.onto2 = null;
+      if(o.rot){ var t = r.w; r.w = r.h; r.h = t; }
+    }
+    r.out = !(r.x >= -EPS && r.y >= -EPS && r.x + r.w <= L + EPS && r.y + r.h <= W + EPS);
+    r.bad = false;
+  });
+
+  backfill(rects, L, W, H, auto);
+
+  var map = {};
+  rects.forEach(function(r){ map[r.id] = r; });
+  rects.forEach(function(r){
+    r.z = r.out ? 0 : zOf(r, map, 0);
+    r.load = 0;
+    r.cov = false;
+  });
+
+  rects.forEach(function(r){
+    if(r.out) return;
+    var n = 1, q = r, g = 0;
+    while(q.onto && map[q.onto] && !map[q.onto].out && g++ < 50){
+      n++;
+      q = map[q.onto];
+    }
+    r.sn = n;
+    if(r.onto && map[r.onto] && !map[r.onto].out) map[r.onto].cov = true;
+    if(r.onto2 && map[r.onto2] && !map[r.onto2].out) map[r.onto2].cov = true;
+    if(r.z + r.hh > H + EPS) r.bad = true;
+  });
+
+  /* Deteksi tabrakan 3D penuh (X, Y, dan Z) */
+  var ins = rects.filter(function(r){ return !r.out; }), anyBad = false;
+  for(var i = 0; i < ins.length; i++){
+    for(var j = i + 1; j < ins.length; j++){
+      if(collides3D(ins[i], ins[j])){
+        ins[i].bad = true;
+        ins[j].bad = true;
+      }
+    }
+  }
+  ins.forEach(function(r){ if(r.bad) anyBad = true; });
+
+  rects.sort(function(a, b){ return (a.z - b.z) || (a.x - b.x) || (a.y - b.y); });
+
+  var placedQ = 0, floorUsed = 0, wsum = 0, mom = 0, maxLoad = 0;
+  rects.forEach(function(r){
+    if(r.out || r.bad) return;
+    var wt = items[r.gi].kg;
+    legend[r.gi].placed++;
+    placedQ++;
+    wsum += wt;
+    mom += wt * (r.x + r.w / 2);
+    var b = r, g = 0;
+    while(b.onto && map[b.onto] && !map[b.onto].out && g++ < 50) b = map[b.onto];
+    b.load += wt;
+    if(r.z < EPS) floorUsed += r.w * r.h;
+  });
+
+  rects.forEach(function(r){
+    if(!r.out && !r.bad && r.z < EPS){
+      var ld = r.load / (r.w * r.h / 1e4);
+      if(ld > maxLoad) maxLoad = ld;
+    }
+  });
+
+  var miss = 0;
+  legend.forEach(function(g){
+    if(g.skip) return;
+    miss += g.q - g.placed;
+    if(g.placed < g.q) msgs.push(g.n + ": space tidak muat, baru " + g.placed + "/" + g.q + " unit termuat.");
+  });
+  if(miss > 0 && miss !== lastMiss && !dragging && Date.now() > toastUntil){
+    toast("Space tidak muat: " + miss + " unit belum termuat.", true);
+  }
+  lastMiss = miss;
+  if(anyBad) msgs.push("Ada barang bertabrakan / melebihi tinggi.");
+  if(totKg > P) msgs.unshift("Overload: " + fmt(totKg) + " kg > " + fmt(P) + " kg.");
+
+  var ok = msgs.length === 0 && totQ > 0, s = $("status");
+  s.className = ok ? "ok" : "bad";
+  if(totQ === 0) s.innerHTML = "Belum ada barang.";
+  else if(ok) s.innerHTML = "&#10003; Semua barang (" + placedQ + " unit) muat optimal.";
+  else s.innerHTML = "! Peringatan Muatan:" + '<ul class="msg">' + msgs.map(function(m){ return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>";
+
+  var cv = L * W * H / 1e6, cg = wsum && L ? mom / wsum / L * 100 : 50;
+  var cgT = cg < 40 ? "Condong Depan" : (cg > 60 ? "Condong Belakang" : "Seimbang");
+  var avgLoad = L * W ? wsum / (L * W / 1e4) : 0;
+
+  $("topMetrics").innerHTML =
+    '<div class="metric"><span>Berat Total</span><b class="' + (totKg > P ? 'warn' : '') + '">' + fmt(totKg) + ' / ' + fmt(P) + ' kg</b></div>' +
+    '<div class="metric"><span>Volume</span><b>' + vol.toFixed(2) + ' / ' + cv.toFixed(2) + ' m&sup3;</b></div>' +
+    '<div class="metric"><span>Titik Berat</span><b>' + cg.toFixed(0) + '% (' + cgT + ')</b></div>' +
+    '<div class="metric"><span>Termuat</span><b>' + placedQ + ' / ' + totQ + ' unit</b></div>';
+
+  $("stats").innerHTML =
+    stat("Berat total", fmt(totKg) + " kg", totKg / P) +
+    stat("Volume barang", vol.toFixed(2) + " / " + cv.toFixed(2) + " m&sup3;", vol / cv) +
+    stat("Lantai terpakai", (L * W ? floorUsed / (L * W) * 100 : 0).toFixed(0) + "%", floorUsed / (L * W)) +
+    stat("Unit termuat", placedQ + " / " + totQ, totQ ? placedQ / totQ : 0, true) +
+    stat2("Beban rata-rata", fmt(avgLoad) + " kg/m&sup2;") +
+    stat2("Beban terpadat", fmt(maxLoad) + " kg/m&sup2;");
+
+  last = {L:L, W:W, H:H, P:P, totKg:totKg, totQ:totQ, placedQ:placedQ, vol:vol, legend:legend};
+  lastRects = rects;
+  draw(L, W, rects, legend);
+  side(L, H, rects);
+  updSel();
+  render3d(L, W, H, rects);
+}
+
+/* ============================================================================
+   7. RENDERER 3D RINGAN (CACHED GEOMETRY, SEPARATE ENV/CARGO, rAF THROTTLING)
+   ============================================================================ */
+var T3 = {ready:false, rafId:0, lastEnvKey:""};
+var UNIT_BOX = null, CYL_CACHE = {}, RING_CACHE = {}, MAT_CACHE = {}, TX = {};
+
+function getUnitBox(){
+  if(!UNIT_BOX) UNIT_BOX = new THREE.BoxGeometry(1, 1, 1);
+  return UNIT_BOX;
+}
+function getCylGeo(rt, rb, h, seg, open){
+  var k = rt.toFixed(2) + "_" + rb.toFixed(2) + "_" + h.toFixed(2) + "_" + seg + "_" + (open ? 1 : 0);
+  if(!CYL_CACHE[k]) CYL_CACHE[k] = new THREE.CylinderGeometry(rt, rb, h, seg, 1, !!open);
+  return CYL_CACHE[k];
+}
+function getRingGeo(ri, ro, seg){
+  var k = ri.toFixed(2) + "_" + ro.toFixed(2) + "_" + seg;
+  if(!RING_CACHE[k]) RING_CACHE[k] = new THREE.RingGeometry(ri, ro, seg);
+  return RING_CACHE[k];
+}
+function getStdMat(col, rough, metal, side){
+  var k = col + "_" + rough + "_" + metal + "_" + (side || 0);
+  if(!MAT_CACHE[k]){
+    MAT_CACHE[k] = new THREE.MeshStandardMaterial({
+      color: col,
+      roughness: rough,
+      metalness: metal,
+      side: side || THREE.FrontSide
+    });
+  }
+  return MAT_CACHE[k];
+}
+
+function disposeGroup(grp){
+  while(grp.children.length){
+    var obj = grp.children[0];
+    grp.remove(obj);
+    obj.traverse(function(n){
+      if(n.isLineSegments && n.geometry) n.geometry.dispose();
+    });
+  }
+}
+
+function scheduleShow3(){
+  if(T3.rafId) return;
+  T3.rafId = requestAnimationFrame(function(){
+    T3.rafId = 0;
+    show3();
+  });
+}
+
+function show3(){
+  var t = T3;
+  if(!t.ready) return;
+  var w = t.el.clientWidth, h = t.el.clientHeight;
+  if(w <= 0 || h <= 0) return;
+  if(t.lastW !== w || t.lastH !== h){
+    t.r.setSize(w, h, false);
+    t.cam.aspect = w / h;
+    t.cam.updateProjectionMatrix();
+    t.lastW = w;
+    t.lastH = h;
+  }
+  var c = Math.cos(t.pitch);
+  t.cam.position.set(
+    (t.cx || 0) + t.dist * c * Math.cos(t.yaw),
+    t.dist * Math.sin(t.pitch),
+    t.dist * c * Math.sin(t.yaw)
+  );
+  t.cam.lookAt(t.cx || 0, t.size * 0.06, 0);
+  t.r.render(t.sc, t.cam);
+}
+
+function init3(){
+  if(T3.ready) return true;
+  if(typeof THREE === "undefined"){
+    $("three").textContent = "Tampilan 3D gagal dimuat.";
+    return false;
+  }
+  try{
+    var el = $("three");
+    var r = new THREE.WebGLRenderer({antialias:true, powerPreference:"high-performance"});
+    r.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
+    el.appendChild(r.domElement);
+
+    var sc = new THREE.Scene();
+    sc.background = new THREE.Color(0xc4ccd5);
+    sc.fog = new THREE.Fog(0xc4ccd5, 3800, 12500);
+
+    sc.add(new THREE.HemisphereLight(0xf8fafc, 0x64748b, 0.62));
+    var dl = new THREE.DirectionalLight(0xfff8ed, 0.58);
+    dl.position.set(1, 2, 1.2);
+    dl.castShadow = true;
+    dl.shadow.mapSize.set(1024, 1024);
+    dl.shadow.bias = -0.0006;
+    sc.add(dl);
+
+    var gl = new THREE.DirectionalLight(0xdbe7f5, 0.18);
+    gl.position.set(-1000, 900, 700);
+    sc.add(gl);
+
+    r.shadowMap.enabled = true;
+    r.shadowMap.type = THREE.PCFShadowMap;
+
+    var envGrp = new THREE.Group();
+    var cargoGrp = new THREE.Group();
+    var hlGrp = new THREE.Group();
+    sc.add(envGrp);
+    sc.add(cargoGrp);
+    sc.add(hlGrp);
+
+    T3 = {
+      ready:true, dl:dl, r:r, sc:sc,
+      cam:new THREE.PerspectiveCamera(36, 1, 1, 22000),
+      envGrp:envGrp, cargoGrp:cargoGrp, hlGrp:hlGrp,
+      el:el, yaw:-0.58, pitch:0.38, dist:1500, size:0,
+      rafId:0, lastEnvKey:"", lastW:0, lastH:0
+    };
+
+    var cvs = r.domElement, drag = null, ptrs = {};
+    cvs.style.touchAction = "none";
+    cvs.style.width = "100%";
+    cvs.style.height = "100%";
+    cvs.style.display = "block";
+
+    cvs.addEventListener("pointerdown", function(e){
+      ptrs[e.pointerId] = [e.clientX, e.clientY];
+      drag = [e.clientX, e.clientY];
+      safeCapture(cvs, e.pointerId);
+    });
+    cvs.addEventListener("pointermove", function(e){
+      var ids = Object.keys(ptrs);
+      if(ptrs[e.pointerId] && ids.length > 1){
+        var a = ptrs[ids[0]], b = ptrs[ids[1]];
+        var d0 = Math.hypot(a[0] - b[0], a[1] - b[1]);
+        ptrs[e.pointerId] = [e.clientX, e.clientY];
+        a = ptrs[ids[0]]; b = ptrs[ids[1]];
+        var d1 = Math.hypot(a[0] - b[0], a[1] - b[1]);
+        if(d0 > 0 && d1 > 0){
+          T3.dist = Math.max(T3.size * 0.45, Math.min(T3.size * 4, T3.dist * d0 / d1));
+          scheduleShow3();
+        }
+        return;
+      }
+      if(ptrs[e.pointerId]) ptrs[e.pointerId] = [e.clientX, e.clientY];
+      if(!drag) return;
+      T3.yaw -= (e.clientX - drag[0]) * 0.008;
+      T3.pitch = Math.max(0.05, Math.min(1.5, T3.pitch + (e.clientY - drag[1]) * 0.008));
+      drag = [e.clientX, e.clientY];
+      scheduleShow3();
+    });
+    function endP(e){ delete ptrs[e.pointerId]; drag = null; }
+    cvs.addEventListener("pointerup", endP);
+    cvs.addEventListener("pointercancel", endP);
+    cvs.addEventListener("wheel", function(e){
+      e.preventDefault();
+      T3.dist = Math.max(T3.size * 0.45, Math.min(T3.size * 4, T3.dist * (1 + e.deltaY * 0.001)));
+      scheduleShow3();
+    }, {passive:false});
+
+    window.addEventListener("resize", scheduleShow3);
+    attach3d(cvs);
+    return true;
+  }catch(e){
+    $("three").textContent = "Tampilan 3D tidak didukung.";
+    return false;
+  }
+}
+
+/* ============================================================================
+   8. PEMBANGUN MODEL KENDARAAN, KONTAINER & TEKSTUR TER-CACHE
+   ============================================================================ */
+var VEH = {
+  "Container 20GP":{k:"cont",t:1,deck:150,wr:50,ax:2},
+  "Container 40GP":{k:"cont",t:1,deck:150,wr:50,ax:3},
+  "Container 40HC":{k:"cont",t:1,deck:150,wr:50,ax:3},
+  "Colt Diesel Engkel (CDE)":{k:"open",deck:95,cl:150,ch:195,wr:35,ax:1,side:40},
+  "Colt Diesel Double (CDD)":{k:"open",deck:105,cl:165,ch:205,wr:40,ax:1,side:45},
+  "Fuso (6 roda)":{k:"open",deck:120,cl:175,ch:225,wr:45,ax:1,side:55},
+  "Tronton (10 roda)":{k:"open",deck:130,cl:190,ch:245,wr:50,ax:2,side:60},
+  "Trailer (bak 12 m)":{k:"flat",t:1,deck:140,wr:50,ax:3},
+  "Pickup (Grand Max / L300)":{k:"open",deck:80,cl:130,ch:160,wr:30,ax:1,side:40,single:1},
+  "Box CDE (tertutup)":{k:"box",deck:95,cl:150,ch:195,wr:35,ax:1},
+  "Wingbox Fuso (6 roda)":{k:"box",deck:120,cl:175,ch:225,wr:45,ax:1},
+  "Wingbox Tronton (10 roda)":{k:"box",deck:130,cl:190,ch:245,wr:50,ax:2},
+  "Fuso (tanpa bak)":{k:"bare",deck:115,cl:175,ch:225,wr:45,ax:1},
+  "Tronton (tanpa bak)":{k:"bare",deck:125,cl:190,ch:245,wr:50,ax:2},
+  "Trailer (tanpa bak)":{k:"bare",t:1,deck:140,wr:50,ax:3}
+};
+function vehOf(n){ return VEH[n] || {k:"open",deck:100,cl:160,ch:200,wr:40,ax:1,side:45}; }
+function vehInfo(n){
+  if(!$("vehOn").checked) return {extra:0, deck:0};
+  var v = vehOf(n);
+  return {extra:(v.t ? 235 : v.cl) + 20, deck:v.deck};
+}
+
+function vbox(g, x, y, z, sx, sy, sz, col, rough, metal){
+  var m = new THREE.Mesh(getUnitBox(), getStdMat(col, rough !== undefined ? rough : 0.4, metal !== undefined ? metal : 0.35));
+  m.scale.set(sx, sy, sz);
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  g.add(m);
+  return m;
+}
+
+function vcyl(g, x, y, z, rt, rb, h, seg, col, rx, rz, rough, metal){
+  var m = new THREE.Mesh(getCylGeo(rt, rb, h, seg || 20, false), getStdMat(col, rough !== undefined ? rough : 0.4, metal !== undefined ? metal : 0.6));
+  if(rx) m.rotation.x = rx;
+  if(rz) m.rotation.z = rz;
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  g.add(m);
+  return m;
+}
+
+function vwheel(g, x, z, r, deck){
+  var y = -deck + r;
+  vcyl(g, x, y, z, r, r, 26, 22, 0x1a1d20, Math.PI/2, 0, 0.88, 0.05);
+  vcyl(g, x, y, z, r * 0.58, r * 0.58, 28, 18, 0xd1d5db, Math.PI/2, 0, 0.2, 0.88);
+  vcyl(g, x, y, z, r * 0.24, r * 0.24, 30, 12, 0x475569, Math.PI/2, 0, 0.4, 0.8);
+}
+
+function vaxle(g, x, Wv, r, deck, dual, isRearMost){
+  var zz = Wv / 2 - 16;
+  vwheel(g, x, zz, r, deck);
+  vwheel(g, x, -zz, r, deck);
+  if(dual){
+    vwheel(g, x, zz - 29, r, deck);
+    vwheel(g, x, -(zz - 29), r, deck);
+  }
+  vcyl(g, x, -deck + r, 0, 6, 6, Wv - 48, 10, 0x1e293b, Math.PI/2, 0, 0.6, 0.7);
+  [-1, 1].forEach(function(s){
+    var fw = dual ? 60 : 32, fz = s * (Wv / 2 - (dual ? 28 : 15));
+    vbox(g, x, -deck + r * 2 + 6, fz, r * 1.55, 4, fw, 0x181b1e, 0.65, 0.2);
+    if(isRearMost) vbox(g, x + r * 1.08, -deck + r * 0.8, fz, 3, r * 1.05, fw * 0.92, 0x111827, 0.9, 0.05);
+  });
+}
+
+function cvTex(key, w, h, fn){
+  if(TX[key]) return TX[key];
+  var c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  fn(c.getContext("2d"), w, h);
+  var t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  TX[key] = t;
+  return t;
+}
+function rp(t, rx, ry){
+  var c = t.clone();
+  c.needsUpdate = true;
+  c.repeat.set(rx, ry);
+  return c;
+}
+function corrTex(){
+  return cvTex("corr", 32, 8, function(x, w, h){
+    var g = x.createLinearGradient(0, 0, w, 0);
+    g.addColorStop(0, "#80858c");
+    g.addColorStop(0.3, "#ffffff");
+    g.addColorStop(0.6, "#eeeeee");
+    g.addColorStop(1, "#7a7f87");
+    x.fillStyle = g;
+    x.fillRect(0, 0, w, h);
+  });
+}
+function woodTex(){
+  return cvTex("wood", 128, 128, function(x, w, h){
+    for(var i = 0; i < 8; i++){
+      var v = 165 + ((i * 17) % 35);
+      x.fillStyle = "rgb(" + v + "," + ((v * 0.74) | 0) + "," + ((v * 0.46) | 0) + ")";
+      x.fillRect(0, i * 16, w, 16);
+      x.fillStyle = "rgba(0,0,0,.26)";
+      x.fillRect(0, i * 16, w, 1.5);
+    }
+  });
+}
 function boxMats(col){
- var k="bm"+col;if(TX[k])return TX[k];
- function mk(top){return new THREE.MeshStandardMaterial({roughness:.9,envMapIntensity:.15,map:cvTex(k+top,128,128,function(x,w,h){
-  x.fillStyle=col;x.fillRect(0,0,w,h);
-  for(var i=0;i<320;i++){x.fillStyle=i%2?"rgba(0,0,0,.04)":"rgba(255,255,255,.04)";x.fillRect(Math.random()*w,Math.random()*h,2+Math.random()*4,1)}
-  x.fillStyle="rgba(0,0,0,.14)";x.fillRect(0,0,w,3);x.fillRect(0,h-3,w,3);x.fillRect(0,0,3,h);x.fillRect(w-3,0,3,h);
-  if(top){x.fillStyle="rgba(255,255,255,.3)";x.fillRect(w/2-9,0,18,h);x.fillStyle="rgba(0,0,0,.2)";x.fillRect(w/2-9,0,1,h);x.fillRect(w/2+8,0,1,h)}
-  else{x.fillStyle="rgba(255,255,255,.3)";x.fillRect(0,h*.46,w,12);x.fillStyle="#f8fafc";x.fillRect(12,14,44,30);x.fillStyle="#475569";x.fillRect(17,20,30,3);x.fillRect(17,27,22,3);x.fillRect(17,34,26,3);x.fillStyle="rgba(255,255,255,.9)";x.font="bold 26px Arial";x.fillText("\u2191\u2191",w-50,h-14)}
- })})}
- var sm=mk(0);return TX[k]=[sm,sm,mk(1),sm,sm,sm];
-}
-function mkBox(w,h,d,col,pal){
- var g=new THREE.Group(),gh=pal?h-12:h;
- var b=new THREE.Mesh(new THREE.BoxGeometry(w,gh,d),boxMats(col));b.position.y=pal?6:0;g.add(b);
- var wrap=null;
- if(pal){
-  var wm=new THREE.MeshStandardMaterial({map:rp(woodTex(),Math.max(w,d)/120,1),roughness:.85});
-  [-1,0,1].forEach(function(i){var s=new THREE.Mesh(new THREE.BoxGeometry(10,8,d),wm);s.position.set(i*(w/2-5),-h/2+4,0);g.add(s)});
-  for(var i=0;i<5;i++){var p=new THREE.Mesh(new THREE.BoxGeometry(w,4,d/6),wm);p.position.set(0,-h/2+10,(i-2)*d/5);g.add(p)}
-  wrap=new THREE.Mesh(new THREE.BoxGeometry(w+.5,gh+.5,d+.5),new THREE.MeshStandardMaterial({color:0xffffff,roughness:.1,transparent:true,opacity:.08,depthWrite:false}));wrap.position.y=6;g.add(wrap);
- }
- g.traverse(function(o){o.castShadow=true;o.receiveShadow=true});if(wrap)wrap.castShadow=false;return g;
-}
-function mkPipe(rad,len,col){
- var g=new THREE.Group(),t=Math.max(1.2,rad*.12);
- var m=new THREE.MeshStandardMaterial({color:col,roughness:.5,metalness:.15,envMapIntensity:.4,side:THREE.DoubleSide});
- g.add(new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,len,40,1,true),m));
- g.add(new THREE.Mesh(new THREE.CylinderGeometry(rad-t,rad-t,len,40,1,true),new THREE.MeshStandardMaterial({color:0x1f2933,roughness:.8,metalness:.3,side:THREE.BackSide})));
- [-1,1].forEach(function(s){var r=new THREE.Mesh(new THREE.RingGeometry(rad-t,rad,40),m);r.rotation.x=-s*Math.PI/2;r.position.y=s*len/2;g.add(r)});
- g.traverse(function(o){o.castShadow=true;o.receiveShadow=true});return g;
-}
-function mkDrum(rad,len,col){
- var g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:col,roughness:.5,metalness:.12,envMapIntensity:.4}),rm=new THREE.MeshStandardMaterial({color:col,roughness:.4,metalness:.2,envMapIntensity:.4});
- g.add(new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,len,36),m));
- [-.32,0,.32].forEach(function(p){var t=new THREE.Mesh(new THREE.TorusGeometry(rad,1.5,8,36),rm);t.rotation.x=Math.PI/2;t.position.y=p*len;g.add(t)});
- var lm=new THREE.MeshStandardMaterial({color:0xcbd5e1,roughness:.3,metalness:.8});
- [-1,1].forEach(function(s){
-  var c=new THREE.Mesh(new THREE.CylinderGeometry(rad*.94,rad*.94,1.4,36),lm);c.position.y=s*len/2;g.add(c);
-  var t=new THREE.Mesh(new THREE.TorusGeometry(rad*.94,1.3,8,36),rm);t.rotation.x=Math.PI/2;t.position.y=s*len/2;g.add(t);
-  var bg=new THREE.Mesh(new THREE.CylinderGeometry(3,3,2,12),rm);bg.position.set(rad*.5,s*(len/2+1),0);g.add(bg);
- });
- g.traverse(function(o){o.castShadow=true;o.receiveShadow=true});return g;
-}
-
-function buildContainer(g,L,W,H,v,showVeh,walls){
- var Wv=Math.min(W+30,255),cont=v.k==="cont";
- function add(m,x,y,z){m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m}
- function wood(sx,sy,sz,rx,ry){return new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),new THREE.MeshStandardMaterial({map:rp(woodTex(),rx,ry),roughness:.82}))}
- vbox(g,0,-4.5,0,L+8,7,showVeh?Wv:W+8,0x2b323c,undefined,.6,.5);
- add(wood(L,1,W,L/300,W/120),0,-.5,0);
-
- if(v.k==="bare"){
-  [-1,1].forEach(function(s){
-   vbox(g,0,3,s*(W/2+2),L+4,6,4,0x3b4552,undefined,.5,.6);
-   for(var p=-L/2+30;p<L/2-10;p+=100)vbox(g,p,-6,s*(W/2+5),8,10,3,0x1e293b,undefined,.5,.6);
-  });
-  [-1,1].forEach(function(a){vbox(g,a*(L/2+2),3,0,4,6,W+8,0x3b4552,undefined,.5,.6)});
-  return;
- }
- if(v.k==="open"||v.k==="flat"){
-  var flat=v.k==="flat",sd=flat?12:v.side,hb=flat?0:Math.min(H,sd+70);
-  if(hb)add(wood(5,hb,W,W/160,hb/60),-L/2+2,hb/2,0);
-  [-1,1].forEach(function(s){
-   add(wood(L,sd,5,L/160,sd/60),0,sd/2,s*(W/2+2.5));
-   for(var p=-L/2+40;p<L/2-20;p+=90)vbox(g,p,sd/2,s*(W/2+5.5),6,sd+4,3,0x1e293b,undefined,.5,.6);
-  });
-  add(wood(5,sd,W,W/160,sd/60),L/2+2.5,sd/2,0);
-  return;
- }
-
- var col=cont?0x1c4f8f:0xe9eef3,fc=cont?0x163f73:0x8a96a3,pw=7;
- function wallMat(len,op){var t=op<1;return new THREE.MeshStandardMaterial({map:rp(corrTex(),len/(cont?22:140),1),color:col,roughness:.5,metalness:.35,transparent:t,opacity:op,depthWrite:!t,side:t?THREE.DoubleSide:THREE.FrontSide})}
- [-1,1].forEach(function(a){[-1,1].forEach(function(b){
-  vbox(g,a*(L/2+2),H/2,b*(W/2+2),pw,H+8,pw,fc,undefined,.3,.8);
-  vbox(g,a*(L/2+2),H+3,b*(W/2+2),pw+2,7,pw+2,0x0f172a,undefined,.25,.9);
-  vbox(g,a*(L/2+2),-3,b*(W/2+2),pw+2,7,pw+2,0x0f172a,undefined,.25,.9);
- })});
- [-1,1].forEach(function(s){vbox(g,0,H+2,s*(W/2+2),L+6,6,6,fc,undefined,.3,.8);vbox(g,0,-2,s*(W/2+2),L+6,6,6,fc,undefined,.3,.8)});
- [-1,1].forEach(function(a){vbox(g,a*(L/2+2),H+2,0,6,6,W+6,fc,undefined,.3,.8)});
-
- var dw=W/2-2;
- [-1,1].forEach(function(s){
-  var dp=new THREE.Group();dp.position.set(L/2+3,H/2,s*(W/2+2));dp.rotation.y=s*(-2.15);
-  var lf=new THREE.Mesh(new THREE.BoxGeometry(3,H-4,dw),wallMat(dw,1));lf.position.set(0,0,-s*dw/2);lf.castShadow=true;dp.add(lf);
-  [.3,.75].forEach(function(p){vcyl(dp,2.4,0,-s*dw*p,1.2,1.2,H-8,10,0xe2e8f0,0,0,.2,.9);vbox(dp,3.4,-H*.02,-s*dw*p,2,12,4,0xcbd5e1,undefined,.2,.9)});
-  g.add(dp);
- });
-
- if(walls){
-  [-1,1].forEach(function(s){var m=new THREE.Mesh(new THREE.BoxGeometry(L,H,1.5),wallMat(L,.08));m.position.set(0,H/2,s*(W/2+1.5));m.renderOrder=2;g.add(m)});
-  var rf=new THREE.Mesh(new THREE.BoxGeometry(L,1.5,W),wallMat(L,.08));rf.position.set(0,H+1,0);rf.renderOrder=2;g.add(rf);
-  var fr=new THREE.Mesh(new THREE.BoxGeometry(1.5,H,W),wallMat(W,.12));fr.position.set(-L/2-1.5,H/2,0);fr.renderOrder=2;g.add(fr);
-  if(cont){
-   var big=L>800,code=big?(H>260?"45G1":"42G1"):"22G1";
-   var dt=cvTex("iso"+code,1024,256,function(x,w,h){x.fillStyle="#f8fafc";x.font="bold 150px Arial,sans-serif";x.fillText("CARGO",20,150);x.font="bold 58px Arial,sans-serif";x.fillText("CGOU 482915 3",20,225);x.fillText(code,640,225);x.fillText(big?"40ft":"20ft",850,225)});
-   var ph=H*.3,dm=new THREE.MeshBasicMaterial({map:dt,transparent:true,depthWrite:false});
-   [-1,1].forEach(function(s){var d=new THREE.Mesh(new THREE.PlaneGeometry(ph*4,ph),dm);d.position.set(-L*.14,H*.66,s*(W/2+2.4));if(s<0)d.rotation.y=Math.PI;d.renderOrder=3;g.add(d)});
+  var k = "bm" + col;
+  if(TX[k]) return TX[k];
+  function mk(top){
+    return new THREE.MeshStandardMaterial({
+      roughness: 0.88,
+      map: cvTex(k + top, 128, 128, function(x, w, h){
+        x.fillStyle = col;
+        x.fillRect(0, 0, w, h);
+        x.fillStyle = "rgba(0,0,0,.15)";
+        x.fillRect(0, 0, w, 3); x.fillRect(0, h - 3, w, 3);
+        x.fillRect(0, 0, 3, h); x.fillRect(w - 3, 0, 3, h);
+        if(top){
+          x.fillStyle = "rgba(255,255,255,.3)";
+          x.fillRect(w / 2 - 9, 0, 18, h);
+          x.fillStyle = "rgba(0,0,0,.2)";
+          x.fillRect(w / 2 - 9, 0, 1, h);
+          x.fillRect(w / 2 + 8, 0, 1, h);
+        }else{
+          x.fillStyle = "rgba(255,255,255,.28)";
+          x.fillRect(0, h * 0.46, w, 12);
+          x.fillStyle = "#f8fafc";
+          x.fillRect(12, 14, 44, 30);
+          x.fillStyle = "#475569";
+          x.fillRect(17, 20, 30, 3);
+          x.fillRect(17, 27, 22, 3);
+          x.fillRect(17, 34, 26, 3);
+          x.fillStyle = "rgba(255,255,255,.9)";
+          x.font = "bold 24px Arial";
+          x.fillText("\u2191\u2191", w - 48, h - 14);
+        }
+      })
+    });
   }
- }
+  var sm = mk(0);
+  TX[k] = [sm, sm, mk(1), sm, sm, sm];
+  return TX[k];
 }
 
-function buildVehicle(g,L,W,H,name){
- var showVeh=$("vehOn").checked;
- var walls=$("wallOn").checked;
- var v=vehOf(name),deck=showVeh?v.deck:0,wr=v.wr,Wv=Math.min(W+30,255);
- var cl=v.t?235:v.cl,ch=v.t?315:v.ch,front=-L/2-18-cl,cx=front+cl/2;
+/* Geometri muatan dengan celah mikro 0.4 cm agar tumpukan 3D presisi & anti Z-fighting */
+function mkBox(w, h, d, col, pal){
+  var g = new THREE.Group();
+  var gap = 0.4;
+  var bw = Math.max(1, w - gap), bh = Math.max(1, h - gap), bd = Math.max(1, d - gap);
+  var palH = pal ? Math.min(11, bh * 0.25) : 0;
+  var gh = Math.max(1, bh - palH);
 
- // Lantai Studio
- var studio=new THREE.Mesh(
-  new THREE.PlaneGeometry(L+(showVeh?cl:0)+2200,W+2000),
-  new THREE.MeshStandardMaterial({color:0xbcc5cf,roughness:0.95,metalness:0.0})
- );
- studio.rotation.x=-Math.PI/2;
- studio.position.set(showVeh?-cl/2:0,-deck-0.5,0);
- studio.receiveShadow=true;
- g.add(studio);
+  var b = new THREE.Mesh(getUnitBox(), boxMats(col));
+  b.scale.set(bw, gh, bd);
+  b.position.y = palH * 0.5;
+  b.castShadow = true;
+  b.receiveShadow = true;
+  g.add(b);
 
- // Grup Kontainer Transparan (selalu dibangun)
- var boxGrp=new THREE.Group();
- boxGrp.name="containerGroup";
- g.add(boxGrp);
- buildContainer(boxGrp,L,W,H,v,showVeh,walls);
-
- // Grup Kendaraan (Kabin, Sasis, Roda)
- if(!showVeh)return;
- var vehGrp=new THREE.Group();
- vehGrp.name="vehicleGroup";
- g.add(vehGrp);
-
- [-1,1].forEach(function(s){vbox(vehGrp,(front+L/2)/2,-16,s*(Wv*0.24),L/2-front-10,14,8,0x1e293b,undefined,0.55,0.7)});
-
- if(v.t){
-  [-1,1].forEach(function(s){var lgX=-L/2+85,lgZ=s*(Wv*0.36);vbox(vehGrp,lgX,-deck*0.48,lgZ,12,deck*0.85,12,0x1e293b,undefined,0.5,0.7);vbox(vehGrp,lgX,-deck+6,lgZ,26,6,20,0x0f172a,undefined,0.6,0.7)});
-  vbox(vehGrp,-L/2+85,-deck*0.55,0,6,6,Wv*0.72,0x334155);vbox(vehGrp,-L/2+25,-18,0,50,10,Wv*0.55,0x0f172a);
- }else{
-  var fAx=front+cl*0.32,rAx=L/2-110-(v.ax-1)*135;
-  if(rAx-fAx>140){
-   var gm=(fAx+rAx)/2,gl=(rAx-fAx)-wr*2.5;
-   vbox(vehGrp,gm-gl*0.12,-28,Wv*0.32,Math.min(95,gl*0.55),30,34,0x7c583a,undefined,0.75,0.1);
-   vcyl(vehGrp,gm,-28,-(Wv*0.3),16,16,72,20,0x1e293b,0,Math.PI/2,0.5,0.6);
-   [-1,1].forEach(function(s){vbox(vehGrp,gm,-20,s*(Wv/2-2),gl,5,3,0x94a3b8,undefined,0.35,0.7);vbox(vehGrp,gm,-35,s*(Wv/2-2),gl,5,3,0x94a3b8,undefined,0.35,0.7)});
+  if(pal && palH > 2){
+    var wm = new THREE.MeshStandardMaterial({map:rp(woodTex(), Math.max(bw, bd) / 120, 1), roughness:0.85});
+    [-1, 0, 1].forEach(function(i){
+      var s = new THREE.Mesh(getUnitBox(), wm);
+      s.scale.set(Math.min(10, bw * 0.15), palH * 0.65, bd);
+      s.position.set(i * (bw * 0.42), -bh * 0.5 + palH * 0.325, 0);
+      s.castShadow = true;
+      s.receiveShadow = true;
+      g.add(s);
+    });
+    var deck = new THREE.Mesh(getUnitBox(), wm);
+    deck.scale.set(bw, palH * 0.35, bd);
+    deck.position.set(0, -bh * 0.5 + palH * 0.825, 0);
+    deck.castShadow = true;
+    deck.receiveShadow = true;
+    g.add(deck);
   }
- }
-
- var cb=-deck+wr*0.72,chh=-deck+ch-cb,tr=!!v.t;
- var cabCol=tr?0x1f5fbf:(v.k==="box"?0x475569:0xd32f2f);
- var cabMat=new THREE.MeshPhysicalMaterial({color:cabCol,roughness:0.3,metalness:0.5,clearcoat:1,clearcoatRoughness:0.15});
- var glassMat=new THREE.MeshStandardMaterial({color:0x08121b,roughness:0.05,metalness:0.92});
- var chromeMat=new THREE.MeshStandardMaterial({color:0xd5dbe1,roughness:0.15,metalness:0.95});
- var whiteMat=new THREE.MeshStandardMaterial({color:0xf3f6f9,roughness:0.4});
- var darkMat=new THREE.MeshStandardMaterial({color:0x14181d,roughness:0.55,metalness:0.4});
- var lampMat=new THREE.MeshStandardMaterial({color:0xfff6c8,emissive:0xfff0a0,emissiveIntensity:0.35,roughness:0.1});
- function cm(geo,mat,x,y,z){var m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;vehGrp.add(m);return m}
- var cs=new THREE.Shape();
- cs.moveTo(cl*0.05,0);cs.lineTo(cl,0);cs.lineTo(cl,chh);cs.lineTo(cl*0.16,chh);cs.lineTo(0,chh*0.64);cs.lineTo(cl*0.012,chh*0.12);cs.quadraticCurveTo(cl*0.012,0,cl*0.05,0);
- var cg=new THREE.ExtrudeGeometry(cs,{depth:Wv-12,bevelEnabled:true,bevelThickness:6,bevelSize:5,bevelSegments:4,curveSegments:12});
- cg.translate(0,0,-(Wv-12)/2);cm(cg,cabMat,front,cb,0);
-
- var wdx=cl*0.16,wdy=chh*0.36,wl=Math.hypot(wdx,wdy);
- var ws=cm(new THREE.BoxGeometry(3,wl*0.92,Wv*0.9),glassMat,front+wdx/2-6,cb+chh*0.64+wdy/2+1.5,0);ws.rotation.z=-Math.atan2(wdx,wdy);
- cm(new THREE.BoxGeometry(3,chh*0.3,Wv*0.6),darkMat,front-6.5,cb+chh*0.32,0);
- for(var gr=0;gr<5;gr++)cm(new THREE.BoxGeometry(2,2.6,Wv*0.56),chromeMat,front-8,cb+chh*(0.2+gr*0.055),0);
- cm(new THREE.BoxGeometry(14,22,Wv+4),chromeMat,front-12,cb+8,0);
- var vis=cm(new THREE.BoxGeometry(22,6,Wv*0.94),cabMat,front+wdx+4,cb+chh+7,0);vis.rotation.z=0.12;
- [-0.2,0,0.2].forEach(function(p){cm(new THREE.BoxGeometry(4,4,12),lampMat,front+wdx+6,cb+chh+12,p*Wv)});
-
- [-1,1].forEach(function(s){
-  var sz=s*(Wv/2+0.8);
-  cm(new THREE.BoxGeometry(cl*0.4,chh*0.3,2),glassMat,front+cl*0.46,cb+chh*0.66,sz);
-  cm(new THREE.BoxGeometry(1.4,chh*0.64,1.6),darkMat,front+cl*0.7,cb+chh*0.4,sz);
-  cm(new THREE.BoxGeometry(8,2.5,3),chromeMat,front+cl*0.64,cb+chh*0.46,sz);
-  cm(new THREE.BoxGeometry(cl*0.95,5,1.4),whiteMat,front+cl*0.5,cb+chh*0.3,sz);
-  cm(new THREE.BoxGeometry(cl*0.32,4,16),darkMat,front+cl*0.5,cb+chh*0.02,s*(Wv/2-8));
-  cm(new THREE.BoxGeometry(3,3,26),darkMat,front+cl*0.2,cb+chh*0.66,s*(Wv/2+12));
-  cm(new THREE.BoxGeometry(5,40,14),darkMat,front+cl*0.2,cb+chh*0.58,s*(Wv/2+24));
-  cm(new THREE.BoxGeometry(3,12,28),lampMat,front-6,cb+chh*0.26,s*(Wv*0.36));
- });
-
- var fairH=Math.max(cb+chh+22,H+2)-(cb+chh);
- if(fairH>8&&v.k!=="bare"&&(tr||v.k==="box"||v.k==="cont")){
-  var x0=front+cl*0.3,fl=-L/2-14-x0,fs=new THREE.Shape();
-  fs.moveTo(0,0);fs.lineTo(fl,0);fs.lineTo(fl,fairH);fs.quadraticCurveTo(fl*0.42,fairH*0.1,0,0);
-  var fg=new THREE.ExtrudeGeometry(fs,{depth:Wv*0.9,bevelEnabled:false});fg.translate(0,0,-Wv*0.45);
-  cm(fg,cabMat,x0,cb+chh,0);
- }
-
- vbox(vehGrp,L/2+4,-14,0,10,14,Wv*0.94,0x334155,undefined,0.5,0.7);
- [-1,1].forEach(function(s){vbox(vehGrp,L/2+9,-14,s*(Wv*0.34),3,9,18,0xdc2626,undefined,0.2,0.2);vbox(vehGrp,L/2+9,-14,s*(Wv*0.42),3,9,8,0xf59e0b,undefined,0.2,0.2)});
-
- if(v.t){
-  vaxle(vehGrp,front+cl*0.32,Wv,wr,deck,false,false);vaxle(vehGrp,-L/2+55,Wv,wr,deck,true,false);
-  for(var i=0;i<v.ax;i++)vaxle(vehGrp,L/2-95-i*125,Wv,wr,deck,true,i===0);
- }else{
-  vaxle(vehGrp,front+cl*0.32,Wv,wr,deck,false,false);
-  for(var j=0;j<v.ax;j++)vaxle(vehGrp,L/2-110-j*135,Wv,wr,deck,!v.single,j===0);
- }
+  return g;
 }
 
-var sSteps=[],sIdx=0,sTimer=null;
+function mkPipe(rad, len, col){
+  var g = new THREE.Group();
+  var rOut = Math.max(0.5, rad - 0.2);
+  var lOut = Math.max(1, len - 0.4);
+  var t = Math.max(1.0, rOut * 0.14);
+  var rIn = Math.max(0.2, rOut - t);
+
+  var mOut = getStdMat(col, 0.45, 0.18, THREE.FrontSide);
+  var mIn = getStdMat(0x1f2933, 0.8, 0.3, THREE.BackSide);
+  var mRing = getStdMat(col, 0.45, 0.18, THREE.DoubleSide);
+
+  var outer = new THREE.Mesh(getCylGeo(rOut, rOut, lOut, 20, true), mOut);
+  outer.castShadow = true;
+  outer.receiveShadow = true;
+  g.add(outer);
+
+  var inner = new THREE.Mesh(getCylGeo(rIn, rIn, lOut, 20, true), mIn);
+  g.add(inner);
+
+  [-1, 1].forEach(function(s){
+    var r = new THREE.Mesh(getRingGeo(rIn, rOut, 20), mRing);
+    r.rotation.x = -s * Math.PI / 2;
+    r.position.y = s * lOut * 0.5;
+    g.add(r);
+  });
+  return g;
+}
+
+function mkDrum(rad, len, col){
+  var g = new THREE.Group();
+  var rOut = Math.max(0.5, rad - 0.2);
+  var lOut = Math.max(1, len - 0.4);
+  var m = getStdMat(col, 0.48, 0.15, THREE.FrontSide);
+  var lm = getStdMat(0xcbd5e1, 0.3, 0.78, THREE.FrontSide);
+
+  var body = new THREE.Mesh(getCylGeo(rOut, rOut, lOut, 22, false), m);
+  body.castShadow = true;
+  body.receiveShadow = true;
+  g.add(body);
+
+  [-0.3, 0, 0.3].forEach(function(p){
+    var rib = new THREE.Mesh(getCylGeo(rOut + 0.6, rOut + 0.6, 2.2, 22, false), m);
+    rib.position.y = p * lOut;
+    g.add(rib);
+  });
+
+  [-1, 1].forEach(function(s){
+    var cap = new THREE.Mesh(getCylGeo(rOut * 0.94, rOut * 0.94, 1.4, 22, false), lm);
+    cap.position.y = s * (lOut * 0.5);
+    g.add(cap);
+  });
+  return g;
+}
+
+function buildContainer(g, L, W, H, v, showVeh, walls){
+  var Wv = Math.min(W + 30, 255), cont = v.k === "cont";
+  function wood(sx, sy, sz, rx, ry){
+    var m = new THREE.Mesh(getUnitBox(), new THREE.MeshStandardMaterial({map:rp(woodTex(), rx, ry), roughness:0.82}));
+    m.scale.set(sx, sy, sz);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    return m;
+  }
+
+  vbox(g, 0, -4.5, 0, L + 8, 7, showVeh ? Wv : W + 8, 0x2b323c, 0.6, 0.5);
+  var floor = wood(L, 1, W, L / 300, W / 120);
+  floor.position.set(0, -0.5, 0);
+  g.add(floor);
+
+  if(v.k === "bare"){
+    [-1, 1].forEach(function(s){
+      vbox(g, 0, 3, s * (W / 2 + 2), L + 4, 6, 4, 0x3b4552, 0.5, 0.6);
+      for(var p = -L / 2 + 30; p < L / 2 - 10; p += 100) vbox(g, p, -6, s * (W / 2 + 5), 8, 10, 3, 0x1e293b, 0.5, 0.6);
+    });
+    [-1, 1].forEach(function(a){ vbox(g, a * (L / 2 + 2), 3, 0, 4, 6, W + 8, 0x3b4552, 0.5, 0.6); });
+    return;
+  }
+  if(v.k === "open" || v.k === "flat"){
+    var flat = v.k === "flat", sd = flat ? 12 : v.side, hb = flat ? 0 : Math.min(H, sd + 70);
+    if(hb){
+      var hbm = wood(5, hb, W, W / 160, hb / 60);
+      hbm.position.set(-L / 2 + 2, hb / 2, 0);
+      g.add(hbm);
+    }
+    [-1, 1].forEach(function(s){
+      var sdm = wood(L, sd, 5, L / 160, sd / 60);
+      sdm.position.set(0, sd / 2, s * (W / 2 + 2.5));
+      g.add(sdm);
+      for(var p = -L / 2 + 40; p < L / 2 - 20; p += 90) vbox(g, p, sd / 2, s * (W / 2 + 5.5), 6, sd + 4, 3, 0x1e293b, 0.5, 0.6);
+    });
+    var rdm = wood(5, sd, W, W / 160, sd / 60);
+    rdm.position.set(L / 2 + 2.5, sd / 2, 0);
+    g.add(rdm);
+    return;
+  }
+
+  var col = cont ? 0x1c4f8f : 0xe9eef3, fc = cont ? 0x163f73 : 0x8a96a3, pw = 7;
+  function wallMat(len, op){
+    var t = op < 1;
+    return new THREE.MeshStandardMaterial({
+      map: rp(corrTex(), len / (cont ? 22 : 140), 1),
+      color: col,
+      roughness: 0.5,
+      metalness: 0.35,
+      transparent: t,
+      opacity: op,
+      depthWrite: !t,
+      side: t ? THREE.DoubleSide : THREE.FrontSide
+    });
+  }
+
+  [-1, 1].forEach(function(a){
+    [-1, 1].forEach(function(b){
+      vbox(g, a * (L / 2 + 2), H / 2, b * (W / 2 + 2), pw, H + 8, pw, fc, 0.3, 0.8);
+      vbox(g, a * (L / 2 + 2), H + 3, b * (W / 2 + 2), pw + 2, 7, pw + 2, 0x0f172a, 0.25, 0.9);
+      vbox(g, a * (L / 2 + 2), -3, b * (W / 2 + 2), pw + 2, 7, pw + 2, 0x0f172a, 0.25, 0.9);
+    });
+  });
+  [-1, 1].forEach(function(s){
+    vbox(g, 0, H + 2, s * (W / 2 + 2), L + 6, 6, 6, fc, 0.3, 0.8);
+    vbox(g, 0, -2, s * (W / 2 + 2), L + 6, 6, 6, fc, 0.3, 0.8);
+  });
+  [-1, 1].forEach(function(a){ vbox(g, a * (L / 2 + 2), H + 2, 0, 6, 6, W + 6, fc, 0.3, 0.8); });
+
+  var dw = W / 2 - 2;
+  [-1, 1].forEach(function(s){
+    var dp = new THREE.Group();
+    dp.position.set(L / 2 + 3, H / 2, s * (W / 2 + 2));
+    dp.rotation.y = s * (-2.15);
+    var lf = new THREE.Mesh(getUnitBox(), wallMat(dw, 1));
+    lf.scale.set(3, H - 4, dw);
+    lf.position.set(0, 0, -s * dw / 2);
+    lf.castShadow = true;
+    dp.add(lf);
+    [0.3, 0.75].forEach(function(p){
+      vcyl(dp, 2.4, 0, -s * dw * p, 1.2, 1.2, H - 8, 8, 0xe2e8f0, 0, 0, 0.2, 0.9);
+      vbox(dp, 3.4, -H * 0.02, -s * dw * p, 2, 12, 4, 0xcbd5e1, 0.2, 0.9);
+    });
+    g.add(dp);
+  });
+
+  if(walls){
+    [-1, 1].forEach(function(s){
+      var m = new THREE.Mesh(getUnitBox(), wallMat(L, 0.08));
+      m.scale.set(L, H, 1.5);
+      m.position.set(0, H / 2, s * (W / 2 + 1.5));
+      m.renderOrder = 2;
+      g.add(m);
+    });
+    var rf = new THREE.Mesh(getUnitBox(), wallMat(L, 0.08));
+    rf.scale.set(L, 1.5, W);
+    rf.position.set(0, H + 1, 0);
+    rf.renderOrder = 2;
+    g.add(rf);
+
+    var fr = new THREE.Mesh(getUnitBox(), wallMat(W, 0.12));
+    fr.scale.set(1.5, H, W);
+    fr.position.set(-L / 2 - 1.5, H / 2, 0);
+    fr.renderOrder = 2;
+    g.add(fr);
+
+    if(cont){
+      var big = L > 800, code = big ? (H > 260 ? "45G1" : "42G1") : "22G1";
+      var dt = cvTex("iso" + code, 512, 128, function(x){
+        x.fillStyle = "#f8fafc";
+        x.font = "bold 74px Arial,sans-serif";
+        x.fillText("CARGO", 10, 74);
+        x.font = "bold 28px Arial,sans-serif";
+        x.fillText("CGOU 482915 3", 10, 112);
+        x.fillText(code, 320, 112);
+        x.fillText(big ? "40ft" : "20ft", 425, 112);
+      });
+      var ph = H * 0.3, dm = new THREE.MeshBasicMaterial({map:dt, transparent:true, depthWrite:false});
+      [-1, 1].forEach(function(s){
+        var d = new THREE.Mesh(new THREE.PlaneGeometry(ph * 4, ph), dm);
+        d.position.set(-L * 0.14, H * 0.66, s * (W / 2 + 2.4));
+        if(s < 0) d.rotation.y = Math.PI;
+        d.renderOrder = 3;
+        g.add(d);
+      });
+    }
+  }
+}
+
+function buildEnv(L, W, H, name){
+  var g = T3.envGrp;
+  disposeGroup(g);
+
+  var showVeh = $("vehOn").checked;
+  var walls = $("wallOn").checked;
+  var v = vehOf(name), deck = showVeh ? v.deck : 0, wr = v.wr, Wv = Math.min(W + 30, 255);
+  var cl = v.t ? 235 : v.cl, ch = v.t ? 315 : v.ch, front = -L / 2 - 18 - cl;
+
+  /* Lantai studio */
+  var studio = new THREE.Mesh(
+    new THREE.PlaneGeometry(L + (showVeh ? cl : 0) + 2400, W + 2200),
+    getStdMat(0xbcc5cf, 0.95, 0.0)
+  );
+  studio.rotation.x = -Math.PI / 2;
+  studio.position.set(showVeh ? -cl / 2 : 0, -deck - 0.5, 0);
+  studio.receiveShadow = true;
+  g.add(studio);
+
+  /* Garis batas pintu belakang merah */
+  vbox(g, L / 2 - 1, 0.5, 0, 2.5, 1, W, 0xef4444, 0.5, 0.1);
+
+  /* Kontainer */
+  var boxGrp = new THREE.Group();
+  g.add(boxGrp);
+  buildContainer(boxGrp, L, W, H, v, showVeh, walls);
+
+  if(!showVeh) return;
+
+  /* Truk / Head Tractor */
+  var vehGrp = new THREE.Group();
+  g.add(vehGrp);
+
+  [-1, 1].forEach(function(s){
+    vbox(vehGrp, (front + L / 2) / 2, -16, s * (Wv * 0.24), L / 2 - front - 10, 14, 8, 0x1e293b, 0.55, 0.7);
+  });
+
+  if(v.t){
+    [-1, 1].forEach(function(s){
+      var lgX = -L / 2 + 85, lgZ = s * (Wv * 0.36);
+      vbox(vehGrp, lgX, -deck * 0.48, lgZ, 12, deck * 0.85, 12, 0x1e293b, 0.5, 0.7);
+      vbox(vehGrp, lgX, -deck + 6, lgZ, 26, 6, 20, 0x0f172a, 0.6, 0.7);
+    });
+    vbox(vehGrp, -L / 2 + 85, -deck * 0.55, 0, 6, 6, Wv * 0.72, 0x334155, 0.5, 0.6);
+    vbox(vehGrp, -L / 2 + 25, -18, 0, 50, 10, Wv * 0.55, 0x0f172a, 0.5, 0.6);
+  }else{
+    var fAx = front + cl * 0.32, rAx = L / 2 - 110 - (v.ax - 1) * 135;
+    if(rAx - fAx > 140){
+      var gm = (fAx + rAx) / 2, gl = (rAx - fAx) - wr * 2.5;
+      vbox(vehGrp, gm - gl * 0.12, -28, Wv * 0.32, Math.min(95, gl * 0.55), 30, 34, 0x7c583a, 0.75, 0.1);
+      vcyl(vehGrp, gm, -28, -(Wv * 0.3), 16, 16, 72, 16, 0x1e293b, 0, Math.PI / 2, 0.5, 0.6);
+    }
+  }
+
+  var cb = -deck + wr * 0.72, chh = -deck + ch - cb, tr = !!v.t;
+  var cabCol = tr ? 0x1f5fbf : (v.k === "box" ? 0x475569 : 0xd32f2f);
+  var cabMat = getStdMat(cabCol, 0.32, 0.45);
+  var glassMat = getStdMat(0x08121b, 0.08, 0.9);
+  var chromeMat = getStdMat(0xd5dbe1, 0.18, 0.92);
+  var whiteMat = getStdMat(0xf3f6f9, 0.4, 0.1);
+  var darkMat = getStdMat(0x14181d, 0.55, 0.4);
+  var lampMat = new THREE.MeshStandardMaterial({color:0xfff6c8, emissive:0xfff0a0, emissiveIntensity:0.35, roughness:0.1});
+
+  function cm(geo, mat, x, y, z){
+    var m = new THREE.Mesh(geo, mat);
+    m.position.set(x, y, z);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    vehGrp.add(m);
+    return m;
+  }
+
+  var cs = new THREE.Shape();
+  cs.moveTo(cl * 0.05, 0);
+  cs.lineTo(cl, 0);
+  cs.lineTo(cl, chh);
+  cs.lineTo(cl * 0.16, chh);
+  cs.lineTo(0, chh * 0.64);
+  cs.lineTo(cl * 0.012, chh * 0.12);
+  cs.quadraticCurveTo(cl * 0.012, 0, cl * 0.05, 0);
+  var cg = new THREE.ExtrudeGeometry(cs, {depth:Wv - 12, bevelEnabled:true, bevelThickness:5, bevelSize:4, bevelSegments:2, curveSegments:6});
+  cg.translate(0, 0, -(Wv - 12) / 2);
+  cm(cg, cabMat, front, cb, 0);
+
+  var wdx = cl * 0.16, wdy = chh * 0.36, wl = Math.hypot(wdx, wdy);
+  var ws = cm(new THREE.BoxGeometry(3, wl * 0.92, Wv * 0.9), glassMat, front + wdx / 2 - 5, cb + chh * 0.64 + wdy / 2 + 1.5, 0);
+  ws.rotation.z = -Math.atan2(wdx, wdy);
+
+  cm(new THREE.BoxGeometry(3, chh * 0.3, Wv * 0.6), darkMat, front - 5.5, cb + chh * 0.32, 0);
+  cm(new THREE.BoxGeometry(14, 22, Wv + 4), chromeMat, front - 11, cb + 8, 0);
+
+  [-1, 1].forEach(function(s){
+    var sz = s * (Wv / 2 + 0.8);
+    cm(new THREE.BoxGeometry(cl * 0.4, chh * 0.3, 2), glassMat, front + cl * 0.46, cb + chh * 0.66, sz);
+    cm(new THREE.BoxGeometry(cl * 0.95, 5, 1.4), whiteMat, front + cl * 0.5, cb + chh * 0.3, sz);
+    cm(new THREE.BoxGeometry(3, 3, 26), darkMat, front + cl * 0.2, cb + chh * 0.66, s * (Wv / 2 + 12));
+    cm(new THREE.BoxGeometry(5, 38, 14), darkMat, front + cl * 0.2, cb + chh * 0.58, s * (Wv / 2 + 24));
+    cm(new THREE.BoxGeometry(3, 12, 28), lampMat, front - 5, cb + chh * 0.26, s * (Wv * 0.36));
+  });
+
+  var fairH = Math.max(cb + chh + 22, H + 2) - (cb + chh);
+  if(fairH > 8 && v.k !== "bare" && (tr || v.k === "box" || v.k === "cont")){
+    var x0 = front + cl * 0.3, fl = -L / 2 - 14 - x0, fs = new THREE.Shape();
+    fs.moveTo(0, 0);
+    fs.lineTo(fl, 0);
+    fs.lineTo(fl, fairH);
+    fs.quadraticCurveTo(fl * 0.42, fairH * 0.1, 0, 0);
+    var fg = new THREE.ExtrudeGeometry(fs, {depth:Wv * 0.9, bevelEnabled:false});
+    fg.translate(0, 0, -Wv * 0.45);
+    cm(fg, cabMat, x0, cb + chh, 0);
+  }
+
+  vbox(vehGrp, L / 2 + 4, -14, 0, 10, 14, Wv * 0.94, 0x334155, 0.5, 0.7);
+  [-1, 1].forEach(function(s){
+    vbox(vehGrp, L / 2 + 9, -14, s * (Wv * 0.34), 3, 9, 18, 0xdc2626, 0.2, 0.2);
+    vbox(vehGrp, L / 2 + 9, -14, s * (Wv * 0.42), 3, 9, 8, 0xf59e0b, 0.2, 0.2);
+  });
+
+  if(v.t){
+    vaxle(vehGrp, front + cl * 0.32, Wv, wr, deck, false, false);
+    vaxle(vehGrp, -L / 2 + 55, Wv, wr, deck, true, false);
+    for(var i = 0; i < v.ax; i++) vaxle(vehGrp, L / 2 - 95 - i * 125, Wv, wr, deck, true, i === 0);
+  }else{
+    vaxle(vehGrp, front + cl * 0.32, Wv, wr, deck, false, false);
+    for(var j = 0; j < v.ax; j++) vaxle(vehGrp, L / 2 - 110 - j * 135, Wv, wr, deck, !v.single, j === 0);
+  }
+}
+
+/* ============================================================================
+   9. SINKRONISASI LANGKAH MUAT & RENDER MUATAN 3D
+   ============================================================================ */
+var sSteps = [], sIdx = 0, sTimer = null;
+
 function syncStep(){
- var n=sSteps.length,r=$("stR"),l=$("stL");r.max=n;r.value=sIdx;
- if(!n)l.textContent="Kosong";
- else if(sIdx>=n)l.textContent="Semua termuat ("+n+")";
- else{var it=items[sSteps[sIdx].gi];l.textContent=(sIdx+1)+"/"+n+": "+(it?it.n:"Barang")}
- sSteps.forEach(function(u,i){var v=i<sIdx;u.m.visible=v;if(u.e)u.e.visible=v});
- show3();
+  var n = sSteps.length, r = $("stR"), l = $("stL");
+  r.max = n;
+  r.value = sIdx;
+  if(!n) l.textContent = "Kosong";
+  else if(sIdx >= n) l.textContent = "Semua termuat (" + n + ")";
+  else{
+    var it = items[sSteps[sIdx].gi];
+    l.textContent = (sIdx + 1) + "/" + n + ": " + (it ? it.n : "Barang");
+  }
+  sSteps.forEach(function(u, i){
+    var v = i < sIdx;
+    u.m.visible = v;
+    if(u.hl) u.hl.visible = v;
+  });
+  scheduleShow3();
 }
-function stopPlay(){if(sTimer){clearInterval(sTimer);sTimer=null;$("stA").textContent="PUTAR"}}
-function render3d(L,W,H,rects){
- if(!init3())return;
- stopPlay();
- var g=T3.grp;while(g.children.length)g.remove(g.children[0]);
- var name=ctSel.value,vi=vehInfo(name),s=Math.max(L+vi.extra,W,H+vi.deck);
- var dl=T3.dl,sh=dl.shadow.camera;
- dl.position.set(s*.9,s*1.2,s*.8);sh.left=-s;sh.right=s;sh.top=s;sh.bottom=-s;sh.near=10;sh.far=s*5;sh.updateProjectionMatrix();
- var gnd=new THREE.Mesh(new THREE.PlaneGeometry(s*8,s*8),new THREE.ShadowMaterial({opacity:.25}));
- gnd.rotation.x=-Math.PI/2;gnd.position.y=-vi.deck-0.3;gnd.receiveShadow=true;g.add(gnd);
 
- // Garis batas pintu belakang merah
- vbox(g,L/2-1,0.5,0,2.5,1,W,0xef4444);
+function stopPlay(){
+  if(sTimer){
+    clearInterval(sTimer);
+    sTimer = null;
+    $("stA").textContent = "PUTAR";
+  }
+}
 
- // Gambar Muatan Barang (renderOrder = 1 agar selalu tergambar di dalam dinding bening)
- var ins=rects.filter(function(r){return !r.out}).slice().sort(function(a,b){return (a.x-b.x)||(a.z-b.z)||(a.y-b.y)});
- sSteps=[];
- ins.forEach(function(r){
-  var it=items[r.gi]||{},col=color(r.gi),mesh,actualH=r.hh;
-  if(r.s==="round"||r.s==="pipe"){
-   var rad=(r.lie?r.hh:Math.min(r.w,r.h))/2-.2,len=r.lie?Math.max(r.w,r.h)-.4:r.hh-.4;
-   mesh=(r.s==="pipe"?mkPipe:mkDrum)(rad,len,col);actualH=r.hh-.4;
-   if(r.lie){if(r.w>=r.h)mesh.rotation.z=Math.PI/2;else mesh.rotation.x=Math.PI/2}
-  }else mesh=mkBox(r.w-.6,r.hh-.6,r.h-.6,col,/palet|pallet/i.test(it.n||""));
-  var px=-L/2+r.x+r.w/2,py=r.z+actualH/2,pz=-W/2+r.y+r.h/2;
-  mesh.position.set(px,py,pz);mesh.userData.rid=r.id;mesh.traverse(function(o){o.renderOrder=1});g.add(mesh);if(r.id===selId){var bh=new THREE.BoxHelper(mesh,0x0ea5e9);bh.renderOrder=5;bh.material.depthTest=false;g.add(bh)}
-  sSteps.push({m:mesh,e:null,gi:r.gi});
- });
+function render3d(L, W, H, rects){
+  if(!init3()) return;
+  stopPlay();
 
- // Gambar Kontainer Transparan & Kendaraan setelah barang ditambahkan
- buildVehicle(g,L,W,H,name);
+  var name = ctSel.value;
+  var vehOn = $("vehOn").checked;
+  var wallOn = $("wallOn").checked;
+  var envKey = [name, L, W, H, vehOn ? 1 : 0, wallOn ? 1 : 0].join("|");
 
- sIdx=sSteps.length;T3.size=s;T3.cx=-vi.extra*0.32;
- if(!T3.initDone){T3.dist=s*1.25;T3.initDone=true}
- syncStep();
+  var vi = vehInfo(name);
+  var s = Math.max(L + vi.extra, W, H + vi.deck);
+
+  if(envKey !== T3.lastEnvKey){
+    var dl = T3.dl, sh = dl.shadow.camera;
+    dl.position.set(s * 0.9, s * 1.2, s * 0.8);
+    sh.left = -s; sh.right = s; sh.top = s; sh.bottom = -s;
+    sh.near = 10; sh.far = s * 5;
+    sh.updateProjectionMatrix();
+
+    buildEnv(L, W, H, name);
+    T3.lastEnvKey = envKey;
+  }
+
+  disposeGroup(T3.cargoGrp);
+  disposeGroup(T3.hlGrp);
+
+  var ins = rects.filter(function(r){ return !r.out; }).slice().sort(function(a, b){
+    return (a.x - b.x) || (a.z - b.z) || (a.y - b.y);
+  });
+
+  sSteps = [];
+  ins.forEach(function(r){
+    var it = items[r.gi] || {}, col = color(r.gi), mesh;
+    if(r.s === "round" || r.s === "pipe"){
+      var rad = (r.lie ? r.hh : Math.min(r.w, r.h)) / 2;
+      var len = r.lie ? Math.max(r.w, r.h) : r.hh;
+      mesh = (r.s === "pipe" ? mkPipe : mkDrum)(rad, len, col);
+      if(r.lie){
+        if(r.w >= r.h) mesh.rotation.z = Math.PI / 2;
+        else mesh.rotation.x = Math.PI / 2;
+      }
+    }else{
+      mesh = mkBox(r.w, r.hh, r.h, col, /palet|pallet/i.test(it.n || ""));
+    }
+
+    var px = -L / 2 + r.x + r.w / 2;
+    var py = r.z + r.hh / 2;
+    var pz = -W / 2 + r.y + r.h / 2;
+    mesh.position.set(px, py, pz);
+    mesh.userData.rid = r.id;
+    mesh.traverse(function(o){ o.renderOrder = 1; });
+    T3.cargoGrp.add(mesh);
+
+    var hl = null;
+    if(r.id === selId || r.bad){
+      hl = new THREE.BoxHelper(mesh, r.bad ? 0xef4444 : 0x0ea5e9);
+      hl.renderOrder = 5;
+      hl.material.depthTest = false;
+      T3.hlGrp.add(hl);
+    }
+    sSteps.push({m:mesh, hl:hl, gi:r.gi});
+  });
+
+  sIdx = sSteps.length;
+  T3.size = s;
+  T3.cx = -vi.extra * 0.32;
+  if(!T3.initDone){
+    T3.dist = s * 1.25;
+    T3.initDone = true;
+  }
+  syncStep();
 }
 
 document.querySelectorAll("[data-view]").forEach(function(b){
- b.onclick=function(){
-  var v=b.dataset.view;
-  if(v==="iso"){T3.yaw=-0.58;T3.pitch=0.38}
-  else if(v==="top"){T3.yaw=-0.001;T3.pitch=1.48}
-  else if(v==="side"){T3.yaw=Math.PI/2;T3.pitch=0.16}
-  else if(v==="back"){T3.yaw=0;T3.pitch=0.22}
-  show3();
- };
+  b.onclick = function(){
+    var v = b.dataset.view;
+    if(v === "iso"){ T3.yaw = -0.58; T3.pitch = 0.38; }
+    else if(v === "top"){ T3.yaw = -0.001; T3.pitch = 1.48; }
+    else if(v === "side"){ T3.yaw = Math.PI / 2; T3.pitch = 0.16; }
+    else if(v === "back"){ T3.yaw = 0; T3.pitch = 0.22; }
+    scheduleShow3();
+  };
 });
-$("vehOn").onchange=calc;$("wallOn").onchange=calc;
-$("stR").oninput=function(){stopPlay();sIdx=+$("stR").value;syncStep()};
-$("stP").onclick=function(){stopPlay();if(sIdx>0){sIdx--;syncStep()}};
-$("stN").onclick=function(){stopPlay();if(sIdx<sSteps.length){sIdx++;syncStep()}};
-$("stA").onclick=function(){
- if(sTimer){stopPlay();return}
- if(sIdx>=sSteps.length)sIdx=0;
- $("stA").textContent="JEDA";
- sTimer=setInterval(function(){if(sIdx<sSteps.length){sIdx++;syncStep()}else stopPlay()},200);
+$("vehOn").onchange = calc;
+$("wallOn").onchange = calc;
+$("stR").oninput = function(){ stopPlay(); sIdx = +$("stR").value; syncStep(); };
+$("stP").onclick = function(){ stopPlay(); if(sIdx > 0){ sIdx--; syncStep(); } };
+$("stN").onclick = function(){ stopPlay(); if(sIdx < sSteps.length){ sIdx++; syncStep(); } };
+$("stA").onclick = function(){
+  if(sTimer){ stopPlay(); return; }
+  if(sIdx >= sSteps.length) sIdx = 0;
+  $("stA").textContent = "JEDA";
+  sTimer = setInterval(function(){
+    if(sIdx < sSteps.length){ sIdx++; syncStep(); }
+    else stopPlay();
+  }, 180);
 };
 
-function fmt(n){return Math.round(n).toLocaleString("id-ID")}
-function stat(l,v,r,inv){var pct=Math.min(100,Math.max(0,(r||0)*100)),over=inv?(r<1):(r>1);return '<div class="stat"><span>'+l+'</span><b>'+v+'</b><div class="meter"><i class="'+(over?"over":"")+'" style="width:'+pct+'%"></i></div></div>'}
-function stat2(l,v){return '<div class="stat"><span>'+l+'</span><b>'+v+'</b></div>'}
-
-function draw(L,W,rects,legend){
- var pad=20,sc=Math.min(280/Math.max(L,1),1.5),cw=L*sc,ch=W*sc;
- var maxY=W;rects.forEach(function(r){if(r.y+r.h>maxY)maxY=r.y+r.h});
- var vh=(maxY-W)*sc+(maxY>W?32:0),svgH=ch+vh+pad*2;
- var s='<svg viewBox="0 0 '+(cw+pad*2)+' '+svgH+'" style="touch-action:none">';
- s+='<rect x="'+pad+'" y="'+pad+'" width="'+cw+'" height="'+ch+'" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="4"/>';
- s+='<line x1="'+(pad+cw)+'" y1="'+pad+'" x2="'+(pad+cw)+'" y2="'+(pad+ch)+'" stroke="#dc2626" stroke-width="3"/>';
- rects.forEach(function(r){
-  var rx=pad+r.x*sc,ry=pad+r.y*sc,rw=r.w*sc,rh=r.h*sc,sel=r.id===selId;
-  var stroke=r.bad?"#dc2626":(sel?"#0f172a":"#1e293b"),sw=r.bad||sel?2:0.8;
-  if(r.s==="round"&&!r.lie)s+='<ellipse data-id="'+r.id+'" cx="'+(rx+rw/2)+'" cy="'+(ry+rh/2)+'" rx="'+(rw/2)+'" ry="'+(rh/2)+'" fill="'+color(r.gi)+'" stroke="'+stroke+'" stroke-width="'+sw+'" style="cursor:grab"/>';
-  else s+='<rect data-id="'+r.id+'" x="'+rx+'" y="'+ry+'" width="'+rw+'" height="'+rh+'" fill="'+color(r.gi)+'" stroke="'+stroke+'" stroke-width="'+sw+'" rx="'+(r.s==="round"?6:2)+'" style="cursor:grab"/>';
-  if(r.sn>1&&!r.cov)s+='<text x="'+(rx+rw/2)+'" y="'+(ry+rh/2+3)+'" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" pointer-events="none">x'+r.sn+'</text>';
- });
- s+='</svg>';$("draw").innerHTML=s;
- $("leg").innerHTML=legend.map(function(g){return '<span><i class="sw" style="background:'+color(g.gi)+';margin-right:4px"></i>'+esc(g.n)+': <b>'+g.placed+'/'+g.q+'</b></span>'}).join("");
+/* ============================================================================
+   10. DENAH 2D, TAMPAK SAMPING & LAPORAN
+   ============================================================================ */
+function stat(l, v, r, inv){
+  var pct = Math.min(100, Math.max(0, (r || 0) * 100)), over = inv ? (r < 1) : (r > 1);
+  return '<div class="stat"><span>' + l + '</span><b>' + v + '</b><div class="meter"><i class="' + (over ? "over" : "") + '" style="width:' + pct + '%"></i></div></div>';
 }
-function side(L,H,rects){
- var pad=20,sc=Math.min(280/Math.max(L,1),1.5),cw=L*sc,ch=H*sc;
- var s='<svg viewBox="0 0 '+(cw+pad*2)+' '+(ch+pad*2)+'">';
- s+='<rect x="'+pad+'" y="'+pad+'" width="'+cw+'" height="'+ch+'" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="4"/>';
- rects.filter(function(r){return !r.out}).forEach(function(r){
-  var rx=pad+r.x*sc,ry=pad+(H-r.z-r.hh)*sc,rw=r.w*sc,rh=r.hh*sc;
-  s+='<rect x="'+rx+'" y="'+ry+'" width="'+rw+'" height="'+rh+'" fill="'+color(r.gi)+'" stroke="#1e293b" stroke-width="0.8"/>';
- });
- s+='</svg>';$("side").innerHTML=s;
+function stat2(l, v){
+  return '<div class="stat"><span>' + l + '</span><b>' + v + '</b></div>';
 }
 
+function draw(L, W, rects, legend){
+  var pad = 20, sc = Math.min(280 / Math.max(L, 1), 1.5), cw = L * sc, ch = W * sc;
+  var maxY = W;
+  rects.forEach(function(r){ if(r.y + r.h > maxY) maxY = r.y + r.h; });
+  var vh = (maxY - W) * sc + (maxY > W ? 32 : 0), svgH = ch + vh + pad * 2;
+  var s = '<svg viewBox="0 0 ' + (cw + pad * 2) + ' ' + svgH + '" style="touch-action:none">';
+  s += '<rect x="' + pad + '" y="' + pad + '" width="' + cw + '" height="' + ch + '" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="4"/>';
+  s += '<line x1="' + (pad + cw) + '" y1="' + pad + '" x2="' + (pad + cw) + '" y2="' + (pad + ch) + '" stroke="#dc2626" stroke-width="3"/>';
+  rects.forEach(function(r){
+    var rx = pad + r.x * sc, ry = pad + r.y * sc, rw = r.w * sc, rh = r.h * sc, sel = r.id === selId;
+    var stroke = r.bad ? "#dc2626" : (sel ? "#0f172a" : "#1e293b"), sw = r.bad || sel ? 2 : 0.8;
+    if(r.s === "round" && !r.lie){
+      s += '<ellipse data-id="' + r.id + '" cx="' + (rx + rw / 2) + '" cy="' + (ry + rh / 2) + '" rx="' + (rw / 2) + '" ry="' + (rh / 2) + '" fill="' + color(r.gi) + '" stroke="' + stroke + '" stroke-width="' + sw + '" style="cursor:grab"/>';
+    }else{
+      s += '<rect data-id="' + r.id + '" x="' + rx + '" y="' + ry + '" width="' + rw + '" height="' + rh + '" fill="' + color(r.gi) + '" stroke="' + stroke + '" stroke-width="' + sw + '" rx="' + (r.s === "round" ? 6 : 2) + '" style="cursor:grab"/>';
+    }
+    if(r.sn > 1 && !r.cov){
+      s += '<text x="' + (rx + rw / 2) + '" y="' + (ry + rh / 2 + 3) + '" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" pointer-events="none">x' + r.sn + '</text>';
+    }
+  });
+  s += '</svg>';
+  $("draw").innerHTML = s;
+  $("leg").innerHTML = legend.map(function(g){
+    return '<span><i class="sw" style="background:' + color(g.gi) + ';margin-right:4px"></i>' + esc(g.n) + ': <b>' + g.placed + '/' + g.q + '</b></span>';
+  }).join("");
+}
+
+function side(L, H, rects){
+  var pad = 20, sc = Math.min(280 / Math.max(L, 1), 1.5), cw = L * sc, ch = H * sc;
+  var s = '<svg viewBox="0 0 ' + (cw + pad * 2) + ' ' + (ch + pad * 2) + '">';
+  s += '<rect x="' + pad + '" y="' + pad + '" width="' + cw + '" height="' + ch + '" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="4"/>';
+  rects.filter(function(r){ return !r.out; }).forEach(function(r){
+    var rx = pad + r.x * sc, ry = pad + (H - r.z - r.hh) * sc, rw = r.w * sc, rh = r.hh * sc;
+    s += '<rect x="' + rx + '" y="' + ry + '" width="' + rw + '" height="' + rh + '" fill="' + color(r.gi) + '" stroke="#1e293b" stroke-width="0.8"/>';
+  });
+  s += '</svg>';
+  $("side").innerHTML = s;
+}
+
+/* Drag & Drop pada Denah 2D */
 (function(){
- var drag=null;
- $("draw").addEventListener("pointerdown",function(e){
-  var id=e.target.dataset&&e.target.dataset.id;if(!id)return;
-  var r=lastRects.find(function(x){return x.id===id});if(!r||r.cov){$("dmsg").textContent=r&&r.cov?"Ambil barang paling atas dahulu.":"";return}
-  $("dmsg").textContent="";selId=id;var sc=Math.min(280/Math.max(lastDim.L,1),1.5);
-  drag={id:id,sx:e.clientX,sy:e.clientY,ox:r.x,oy:r.y,sc:sc,moved:false,prev:ov[id]?Object.assign({},ov[id]):null};dragging=true;e.target.setPointerCapture(e.pointerId);calc();
- });
- $("draw").addEventListener("pointermove",function(e){
-  if(!drag)return;if(!drag.moved){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<4)return;drag.moved=true}var nx=Math.max(0,drag.ox+(e.clientX-drag.sx)/drag.sc),ny=Math.max(0,drag.oy+(e.clientY-drag.sy)/drag.sc);
-  var cur=ov[drag.id]||{};ov[drag.id]={x:nx,y:ny,rot:cur.rot||false,onto:null};calc();
- });
- $("draw").addEventListener("pointerup",function(){
-  if(!drag)return;var d=drag;drag=null;dragging=false;
-  if(d.moved&&ov[d.id])dropFix(d);
-  calc();
- });
- $("draw").addEventListener("dblclick",function(e){var id=e.target.dataset&&e.target.dataset.id;if(id){selId=id;$("rot").click()}});
+  var drag = null, drawEl = $("draw");
+  drawEl.addEventListener("pointerdown", function(e){
+    var id = e.target.dataset && e.target.dataset.id;
+    if(!id) return;
+    var r = lastRects.find(function(x){ return x.id === id; });
+    if(!r || r.cov){
+      $("dmsg").textContent = r && r.cov ? "Ambil barang paling atas dahulu." : "";
+      return;
+    }
+    $("dmsg").textContent = "";
+    selId = id;
+    var sc = Math.min(280 / Math.max(lastDim.L, 1), 1.5);
+    drag = {
+      id: id, sx: e.clientX, sy: e.clientY,
+      ox: r.x, oy: r.y, sc: sc, moved: false,
+      prev: ov[id] ? Object.assign({}, ov[id]) : null,
+      startSnap: captureState()
+    };
+    dragging = true;
+    safeCapture(drawEl, e.pointerId);
+    calc();
+  });
+  drawEl.addEventListener("pointermove", function(e){
+    if(!drag) return;
+    if(!drag.moved){
+      if(Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return;
+      drag.moved = true;
+    }
+    var nx = Math.max(0, drag.ox + (e.clientX - drag.sx) / drag.sc);
+    var ny = Math.max(0, drag.oy + (e.clientY - drag.sy) / drag.sc);
+    var cur = ov[drag.id] || {};
+    ov[drag.id] = {x:nx, y:ny, rot:cur.rot || false, onto:null};
+    calc();
+  });
+  function end2d(){
+    if(!drag) return;
+    var d = drag;
+    drag = null;
+    dragging = false;
+    if(d.moved && ov[d.id]){
+      pushHistory(d.startSnap);
+      dropFix(d);
+    }
+    calc();
+  }
+  drawEl.addEventListener("pointerup", end2d);
+  drawEl.addEventListener("pointercancel", end2d);
+  drawEl.addEventListener("dblclick", function(e){
+    var id = e.target.dataset && e.target.dataset.id;
+    if(id){ selId = id; $("rot").click(); }
+  });
 })();
 
-$("rot").onclick=function(){if(!selId)return;var r=lastRects.find(function(x){return x.id===selId});if(!r||r.cov)return;var cur=ov[selId]||{x:r.x,y:r.y,onto:r.onto};ov[selId]={x:cur.x,y:cur.y,rot:!cur.rot,onto:cur.onto};calc()};
-$("auto").onclick=function(){ov={};selId=null;$("dmsg").textContent="";calc()};
-$("mode").onchange=function(){ov={};selId=null;calc()};
+$("rot").onclick = function(){
+  if(!selId) return;
+  var r = lastRects.find(function(x){ return x.id === selId; });
+  if(!r || r.cov) return;
+  pushHistory();
+  var cur = ov[selId] || {x:r.x, y:r.y, onto:r.onto};
+  ov[selId] = {x:cur.x, y:cur.y, rot:!cur.rot, onto:cur.onto};
+  calc();
+};
+$("auto").onclick = function(){
+  pushHistory();
+  ov = {};
+  selId = null;
+  $("dmsg").textContent = "";
+  calc();
+};
+$("mode").onchange = function(){
+  pushHistory();
+  ov = {};
+  selId = null;
+  calc();
+};
 
 document.querySelectorAll("[data-u]").forEach(function(b){
- b.onclick=function(){
-  var nu=b.dataset.u.toLowerCase();if(nu===unit)return;
-  var L=toCm(+$("cL").value),W=toCm(+$("cW").value),H=toCm(+$("cH").value);unit=nu;
-  document.querySelectorAll("[data-u]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
-  $("cL").value=fromCm(L);$("cW").value=fromCm(W);$("cH").value=fromCm(H);renderRows();calc();
- };
+  b.onclick = function(){
+    var nu = b.dataset.u.toLowerCase();
+    if(nu === unit) return;
+    pushHistory();
+    var L = toCm(+$("cL").value), W = toCm(+$("cW").value), H = toCm(+$("cH").value);
+    unit = nu;
+    document.querySelectorAll("[data-u]").forEach(function(x){
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    $("cL").value = fromCm(L);
+    $("cW").value = fromCm(W);
+    $("cH").value = fromCm(H);
+    renderRows();
+    calc();
+  };
 });
 
-$("ex").onclick=function(){
- if(!last)return;
- var lines=["Nama\tBentuk\tP ("+unit+")\tL ("+unit+")\tT ("+unit+")\tBerat (kg)\tJumlah\tTermuat\tDitumpuk"];
- items.forEach(function(it,i){var lg=last.legend[i]||{placed:0};lines.push([it.n,SHAPE[it.s||"box"],fromCm(it.l),fromCm(it.w),fromCm(it.h),it.kg,it.q,lg.placed,it.st?"Ya":"Tidak"].join("\t"))});
- var box=$("exp");box.value=lines.join("\n");box.hidden=false;box.select();
- try{navigator.clipboard.writeText(box.value);$("exmsg").textContent="Tabel disalin ke clipboard."}catch(e){$("exmsg").textContent="Salin teks di kotak atas."}
+$("ex").onclick = function(){
+  if(!last) return;
+  var lines = ["Nama\tBentuk\tP (" + unit + ")\tL (" + unit + ")\tT (" + unit + ")\tBerat (kg)\tJumlah\tTermuat\tDitumpuk"];
+  items.forEach(function(it, i){
+    var lg = last.legend[i] || {placed:0};
+    lines.push([it.n, SHAPE[it.s || "box"], fromCm(it.l), fromCm(it.w), fromCm(it.h), it.kg, it.q, lg.placed, it.st ? "Ya" : "Tidak"].join("\t"));
+  });
+  var box = $("exp");
+  box.value = lines.join("\n");
+  box.hidden = false;
+  box.select();
+  try{
+    document.execCommand("copy");
+    $("exmsg").textContent = "Tabel disalin ke clipboard.";
+  }catch(e){
+    $("exmsg").textContent = "Salin teks di kotak atas.";
+  }
 };
-$("pr").onclick=function(){window.print()};
+$("pr").onclick = function(){ window.print(); };
 
-function upd(id){return lastRects.find(function(x){return x.id===id})}
-function moveSel(nx,ny){
- var id=selId,r=id&&upd(id);if(!r)return;
- if(r.cov){note("Ambil barang paling atas dahulu.",true);return}
- var prev=ov[id]?Object.assign({},ov[id]):null,cur=ov[id]||{};
- ov[id]={x:Math.max(0,nx),y:Math.max(0,ny),rot:cur.rot||false,onto:null};
- calc();dropFix({id:id,prev:prev});calc();
+/* ============================================================================
+   11. KONTROL POSISI MANUAL, DRAG 3D & SHORTCUT KEYBOARD
+   ============================================================================ */
+function upd(id){ return lastRects.find(function(x){ return x.id === id; }); }
+
+function moveSel(nx, ny){
+  var id = selId, r = id && upd(id);
+  if(!r) return;
+  if(r.cov){ note("Ambil barang paling atas dahulu.", true); return; }
+  var startSnap = captureState();
+  var prev = ov[id] ? Object.assign({}, ov[id]) : null, cur = ov[id] || {};
+  ov[id] = {x:Math.max(0, nx), y:Math.max(0, ny), rot:cur.rot || false, onto:null};
+  calc();
+  dropFix({id:id, prev:prev});
+  pushHistory(startSnap);
+  calc();
 }
+
 function updSel(){
- var r=selId&&upd(selId),nm=$("selNm");if(!nm)return;
- if(!r){nm.textContent="Klik barang di 3D atau denah, lalu seret.";return}
- nm.textContent=items[r.gi].n+(r.out?" (belum termuat)":(r.z>0?" \u00b7 tertumpuk":""));
- if(document.activeElement!==$("pX"))$("pX").value=fromCm(r.x);
- if(document.activeElement!==$("pY"))$("pY").value=fromCm(r.y);
+  var r = selId && upd(selId), nm = $("selNm");
+  if(!nm) return;
+  if(!r){
+    nm.textContent = "Klik barang di 3D atau denah, lalu seret.";
+    return;
+  }
+  nm.textContent = items[r.gi].n + (r.out ? " (belum termuat)" : (r.z > 0 ? " \u00b7 tertumpuk" : ""));
+  if(document.activeElement !== $("pX")) $("pX").value = fromCm(r.x);
+  if(document.activeElement !== $("pY")) $("pY").value = fromCm(r.y);
 }
-$("pX").onchange=function(){var r=upd(selId);if(r)moveSel(toCm(+this.value),r.y)};
-$("pY").onchange=function(){var r=upd(selId);if(r)moveSel(r.x,toCm(+this.value))};
-document.querySelectorAll("[data-nd]").forEach(function(b){b.onclick=function(){
- var r=upd(selId);if(!r){note("Pilih barang dahulu (klik di 3D atau denah).",true);return}
- var d=b.dataset.nd.split(",");moveSel(r.x+d[0]*10,r.y+d[1]*10)}});
-$("pRot").onclick=function(){$("rot").click()};
-$("pRst").onclick=function(){$("auto").click()};
-document.addEventListener("keydown",function(e){
- if(!selId||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
- var m={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(!m)return;
- e.preventDefault();var r=upd(selId);if(r)moveSel(r.x+m[0]*10,r.y+m[1]*10);
+
+$("pX").onchange = function(){ var r = upd(selId); if(r) moveSel(toCm(+this.value), r.y); };
+$("pY").onchange = function(){ var r = upd(selId); if(r) moveSel(r.x, toCm(+this.value)); };
+document.querySelectorAll("[data-nd]").forEach(function(b){
+  b.onclick = function(){
+    var r = upd(selId);
+    if(!r){ note("Pilih barang dahulu (klik di 3D atau denah).", true); return; }
+    var d = b.dataset.nd.split(",");
+    moveSel(r.x + d[0] * 10, r.y + d[1] * 10);
+  };
 });
+$("pRot").onclick = function(){ $("rot").click(); };
+$("pRst").onclick = function(){ $("auto").click(); };
+
+document.addEventListener("keydown", function(e){
+  var inField = /INPUT|SELECT|TEXTAREA/.test(e.target.tagName);
+  /* Shortcut Undo / Redo */
+  if((e.ctrlKey || e.metaKey) && !inField){
+    var key = e.key.toLowerCase();
+    if(key === "z" && !e.shiftKey){ e.preventDefault(); undo(); return; }
+    if(key === "y" || (key === "z" && e.shiftKey)){ e.preventDefault(); redo(); return; }
+  }
+  /* Geser barang terpilih dengan tombol panah */
+  if(!selId || inField) return;
+  var m = {ArrowLeft:[-1,0], ArrowRight:[1,0], ArrowUp:[0,-1], ArrowDown:[0,1]}[e.key];
+  if(!m) return;
+  e.preventDefault();
+  var r = upd(selId);
+  if(r) moveSel(r.x + m[0] * 10, r.y + m[1] * 10);
+});
+
+/* Drag & Drop langsung di Viewport 3D dengan live-snapping saat ditumpuk */
 function attach3d(cvs){
- var rc=new THREE.Raycaster(),pl=new THREE.Plane(new THREE.Vector3(0,1,0),0),st=null;
- function ray(e){var b=cvs.getBoundingClientRect();rc.setFromCamera(new THREE.Vector2((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1),T3.cam)}
- function floorPt(e,y){ray(e);pl.constant=-y;var p=new THREE.Vector3();return rc.ray.intersectPlane(pl,p)?p:null}
- cvs.addEventListener("pointerdown",function(e){
-  if(e.pointerType==="mouse"&&e.button!==0)return;
-  ray(e);
-  var ms=sSteps.filter(function(u){return u.m.visible}).map(function(u){return u.m}),hs=rc.intersectObjects(ms,true);
-  if(!hs.length)return;
-  var o=hs[0].object;while(o&&!(o.userData&&o.userData.rid))o=o.parent;if(!o)return;
-  var r=upd(o.userData.rid);if(!r)return;
-  e.stopImmediatePropagation();selId=r.id;
-  if(r.cov){note("Ambil barang paling atas dahulu.",true);calc();return}
-  var p=floorPt(e,r.z);if(!p){calc();return}
-  st={id:r.id,y:r.z,ox:p.x-(-lastDim.L/2+r.x+r.w/2),oz:p.z-(-lastDim.W/2+r.y+r.h/2),moved:false,sx:e.clientX,sy:e.clientY,prev:ov[r.id]?Object.assign({},ov[r.id]):null};
-  cvs.setPointerCapture(e.pointerId);calc();
- },true);
- cvs.addEventListener("pointermove",function(e){
-  if(!st)return;
-  if(!st.moved){if(Math.hypot(e.clientX-st.sx,e.clientY-st.sy)<4)return;st.moved=true}
-  var p=floorPt(e,st.y),r=upd(st.id);if(!p||!r)return;
-  var cur=ov[st.id]||{};dragging=true;
-  ov[st.id]={x:Math.max(0,p.x-st.ox+lastDim.L/2-r.w/2),y:Math.max(0,p.z-st.oz+lastDim.W/2-r.h/2),rot:cur.rot||false,onto:null};calc();
- });
- function end(){if(!st)return;var d=st;st=null;dragging=false;if(d.moved&&ov[d.id])dropFix(d);calc()}
- cvs.addEventListener("pointerup",end);cvs.addEventListener("pointercancel",end);
+  var rc = new THREE.Raycaster(), pl = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), st = null;
+  function ray(e){
+    var b = cvs.getBoundingClientRect();
+    rc.setFromCamera(new THREE.Vector2((e.clientX - b.left) / b.width * 2 - 1, -(e.clientY - b.top) / b.height * 2 + 1), T3.cam);
+  }
+  function floorPt(e, y){
+    ray(e);
+    pl.constant = -y;
+    var p = new THREE.Vector3();
+    return rc.ray.intersectPlane(pl, p) ? p : null;
+  }
+
+  cvs.addEventListener("pointerdown", function(e){
+    if(e.pointerType === "mouse" && e.button !== 0) return;
+    ray(e);
+    var ms = sSteps.filter(function(u){ return u.m.visible; }).map(function(u){ return u.m; });
+    var hs = rc.intersectObjects(ms, true);
+    if(!hs.length) return;
+    var o = hs[0].object;
+    while(o && !(o.userData && o.userData.rid)) o = o.parent;
+    if(!o) return;
+    var r = upd(o.userData.rid);
+    if(!r) return;
+
+    e.stopImmediatePropagation();
+    selId = r.id;
+    if(r.cov){
+      note("Ambil barang paling atas dahulu.", true);
+      calc();
+      return;
+    }
+    var p = floorPt(e, r.z);
+    if(!p){ calc(); return; }
+    st = {
+      id: r.id, y: r.z,
+      ox: p.x - (-lastDim.L / 2 + r.x + r.w / 2),
+      oz: p.z - (-lastDim.W / 2 + r.y + r.h / 2),
+      moved: false, sx: e.clientX, sy: e.clientY,
+      prev: ov[r.id] ? Object.assign({}, ov[r.id]) : null,
+      startSnap: captureState(),
+      baseRot: (ov[r.id] && ov[r.id].rot) ? true : false
+    };
+    safeCapture(cvs, e.pointerId);
+    calc();
+  }, true);
+
+  cvs.addEventListener("pointermove", function(e){
+    if(!st) return;
+    if(!st.moved){
+      if(Math.hypot(e.clientX - st.sx, e.clientY - st.sy) < 4) return;
+      st.moved = true;
+    }
+    var p = floorPt(e, st.y), r = upd(st.id);
+    if(!p || !r) return;
+    dragging = true;
+
+    var nx = Math.max(0, Math.min(lastDim.L - r.w, p.x - st.ox + lastDim.L / 2 - r.w / 2));
+    var ny = Math.max(0, Math.min(lastDim.W - r.h, p.z - st.oz + lastDim.W / 2 - r.h / 2));
+
+    /* Live preview tumpukan 3D agar tidak menembus barang di bawahnya */
+    var others = lastRects.filter(function(x){ return x.id !== st.id && !x.out; });
+    var probe = {id:r.id, gi:r.gi, w:r.w, h:r.h, hh:r.hh};
+    var stTgt = findStackTarget(probe, others, lastDim.H, nx, ny, false);
+    if(stTgt){
+      ov[st.id] = {
+        x: stTgt.x,
+        y: stTgt.y,
+        rot: stTgt.rot ? !st.baseRot : st.baseRot,
+        onto: stTgt.t.id
+      };
+    }else{
+      ov[st.id] = {x:nx, y:ny, rot:st.baseRot, onto:null};
+    }
+    calc();
+  });
+
+  function end3d(){
+    if(!st) return;
+    var d = st;
+    st = null;
+    dragging = false;
+    if(d.moved && ov[d.id]){
+      pushHistory(d.startSnap);
+      dropFix(d);
+    }
+    calc();
+  }
+  cvs.addEventListener("pointerup", end3d);
+  cvs.addEventListener("pointercancel", end3d);
 }
-document.querySelector("#posCard details").open=innerWidth>700;
 
-/* PWA: pendaftaran service worker + tombol pasang aplikasi */
-if("serviceWorker" in navigator&&location.protocol!=="file:")window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
-var instEv=null;
-window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();instEv=e;$("installBtn").hidden=false});
-$("installBtn").onclick=function(){if(!instEv)return;instEv.prompt();instEv.userChoice.then(function(){instEv=null;$("installBtn").hidden=true})};
-window.addEventListener("appinstalled",function(){instEv=null;$("installBtn").hidden=true});
+/* ============================================================================
+   12. INISIALISASI APLIKASI
+   ============================================================================ */
+document.querySelector("#posCard details").open = window.innerWidth > 720;
 
-renderRows();
-setCt();
+window.addEventListener("load", function(){
+  renderRows();
+  setCt(false);
+  updateHistButtons();
+});
 </script>
 </body>
 </html>
